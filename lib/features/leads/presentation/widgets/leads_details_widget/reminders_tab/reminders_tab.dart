@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+import 'package:sales_crm/core/helpers/extensions.dart';
+
+import '../../../../../../core/routing/app_routes.dart';
+
+
+
+class RemindersTab extends StatelessWidget {
+  const RemindersTab({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lead Reminder'),
+        backgroundColor: Colors.green,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                print('Close button pressed');
+                context.pushNamed(AppRoutes.leadsAddReminderRoute);
+              },
+              icon: Icon(Icons.notifications_active),
+              label: Text('Set Lead Reminder'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text('#')),
+                  DataColumn(label: Text('Description')),
+                  DataColumn(label: Text('Date')),
+                  DataColumn(label: Text('Remind')),
+                  DataColumn(label: Text('Is Notified?')),
+                ],
+                rows: [
+                  DataRow(cells: [
+                    DataCell(Text('1')),
+                    DataCell(Text(
+                        'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.')),
+                    DataCell(Text('2024-08-22 21:00:00')),
+                    DataCell(Row(
+                      children: [
+                        Icon(Icons.notifications),
+                        SizedBox(width: 4),
+                        Text('Go Grow'),
+                      ],
+                    )),
+                    DataCell(Text('No')),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('2')),
+                    DataCell(Text(
+                        'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.')),
+                    DataCell(Text('2024-08-22 21:00:00')),
+                    DataCell(Row(
+                      children: [
+                        Icon(Icons.notifications),
+                        SizedBox(width: 4),
+                        Text('Go Grow'),
+                      ],
+                    )),
+                    DataCell(Text('No')),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('3')),
+                    DataCell(Text(
+                        'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.')),
+                    DataCell(Text('2024-08-22 21:00:00')),
+                    DataCell(Row(
+                      children: [
+                        Icon(Icons.notifications),
+                        SizedBox(width: 4),
+                        Text('Go Grow'),
+                      ],
+                    )),
+                    DataCell(Text('No')),
+                  ]),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

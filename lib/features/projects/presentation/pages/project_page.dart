@@ -1,20 +1,20 @@
+
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sales_crm/core/constants/app_colors.dart';
-import 'package:sales_crm/core/helpers/extensions.dart';
-import 'package:sales_crm/core/routing/app_routes.dart';
-import 'package:sales_crm/features/drawer/presentation/pages/drawer_page.dart';
 
-import '../widgets/leads_widgets/leads_page_body.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../leads/presentation/widgets/leads_widgets/leads_page_body.dart';
 
-class LeadsPage extends StatefulWidget {
-  const LeadsPage({super.key});
+class ProjectPage extends StatefulWidget {
+  const ProjectPage({super.key});
 
   @override
-  _LeadsPageState createState() => _LeadsPageState();
+  _ProjectPageState createState() => _ProjectPageState();
 }
 
-class _LeadsPageState extends State<LeadsPage> {
+class _ProjectPageState extends State<ProjectPage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _isFabVisible = ValueNotifier(true);
 
@@ -40,7 +40,6 @@ class _LeadsPageState extends State<LeadsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerPage(),
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         backgroundColor: AppColors.primaryYellow,
@@ -56,7 +55,7 @@ class _LeadsPageState extends State<LeadsPage> {
             duration: const Duration(milliseconds: 300),
             child: FloatingActionButton(
               onPressed: () {
-                context.pushNamed(AppRoutes.leadsAddRoute);
+                // context.pushNamed(AppRoutes.leadsAddRoute);
               },
               backgroundColor: AppColors.primaryYellow,
               child: const Icon(Icons.add),

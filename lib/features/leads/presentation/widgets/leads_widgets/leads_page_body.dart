@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/core/app.dart';
-import 'package:sales_crm/features/leads/presentation/widgets/summary_card_widget.dart';
+import 'package:sales_crm/features/leads/presentation/widgets/leads_widgets/summary_card_widget.dart';
 
 import 'lead_item_widget.dart';
+
 
 class LeadsPageBody extends StatelessWidget {
   final ScrollController scrollController;
@@ -46,7 +46,7 @@ class LeadsPageBody extends StatelessWidget {
               children: const [
                 SummaryCard(
                   iconColor: Colors.green,
-                  title: 'New leads',
+                  title: 'New leads_widgets',
                   value: '22',
                 ),
                 SummaryCard(
