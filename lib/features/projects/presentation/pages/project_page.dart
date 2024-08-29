@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../leads/presentation/widgets/leads_widgets/leads_page_body.dart';
+import '../widgets/project_page_body.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({super.key});
@@ -43,10 +43,10 @@ class _ProjectPageState extends State<ProjectPage> {
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         backgroundColor: AppColors.primaryYellow,
-        title: const Text('Leads'),
+        title: const Text('projects'),
       ),
       resizeToAvoidBottomInset: true,
-      body: LeadsPageBody(scrollController: _scrollController),
+      body: ProjectPageBody(scrollController: _scrollController),
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _isFabVisible,
         builder: (context, isVisible, child) {

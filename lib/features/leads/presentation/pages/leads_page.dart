@@ -45,6 +45,14 @@ class _LeadsPageState extends State<LeadsPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryYellow,
         title: const Text('Leads'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.import_contacts_outlined),
+            onPressed: () {
+              context.pushNamed(AppRoutes.leadsImportRoute);
+            },
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: true,
       body: LeadsPageBody(scrollController: _scrollController),

@@ -25,8 +25,7 @@ class DrawerPage extends StatelessWidget {
           ListTile(
             title: Text('leads_widgets'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              
             },
           ),
           ListTile(

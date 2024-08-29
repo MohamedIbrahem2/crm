@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sales_crm/features/leads/presentation/widgets/leads_details_widget/contract_tab.dart';
 
+import '../widgets/leads_details_widget/acitivity_log_tab.dart';
+import '../widgets/leads_details_widget/note_tap.dart';
 import '../widgets/leads_details_widget/profile_tab.dart';
 import '../widgets/leads_details_widget/proposals.dart';
 import '../widgets/leads_details_widget/reminders_tab/reminders_tab.dart';
@@ -90,8 +92,8 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
                 ProposalsTab(),
                 ContractTab(),
                 RemindersTab(),
-                Center(child: Text('Notes content here')),
-                Center(child: Text('Activity Log content here')),
+                NoteTab(),
+                ActivityLogTab(),
               ],
             ),
           ),
