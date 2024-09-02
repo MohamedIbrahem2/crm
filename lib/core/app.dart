@@ -16,7 +16,7 @@ Widget build(BuildContext context) {
       return MaterialApp(
         title: 'Currency&Gold',
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.leadsImportRoute,
+        initialRoute: AppRoutes.todoRoute,
         theme: ThemeData.light().copyWith(
           primaryColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,

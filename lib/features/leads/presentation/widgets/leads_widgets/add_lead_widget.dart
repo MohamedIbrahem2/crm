@@ -52,12 +52,6 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create New Lead'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back button press
-          },
-        ),
         backgroundColor: AppColors.primaryYellow
       ),
       body: SingleChildScrollView(

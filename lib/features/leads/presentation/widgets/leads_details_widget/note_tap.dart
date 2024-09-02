@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/constants/app_colors.dart';
+
 class NoteTab extends StatefulWidget {
   const NoteTab({super.key});
   @override
@@ -59,7 +61,7 @@ class _NoteTabState extends State<NoteTab> {
                   // Implement note adding functionality
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: AppColors.primaryYellow,
                   padding: EdgeInsets.symmetric(vertical: 12),
                 ),
               ),

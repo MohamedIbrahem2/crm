@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sales_crm/core/constants/app_colors.dart';
 import 'package:sales_crm/features/leads/presentation/widgets/leads_details_widget/contract_tab.dart';
 
 import '../widgets/leads_details_widget/acitivity_log_tab.dart';
@@ -53,6 +54,7 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primaryYellow,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -80,9 +82,9 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
               Tab(text: 'Notes'),
               Tab(text: 'Activity Log'),
             ],
-            labelColor: Colors.blue,
+            labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.blue,
+            indicatorColor: AppColors.primaryYellow,
           ),
           Expanded(
             child: TabBarView(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ActivityLogTab extends StatelessWidget {
   const ActivityLogTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,55 +13,44 @@ class ActivityLogTab extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView(
-                  children: [
+                  children: const  [
                     ActivityItem(
                       timeAgo: '3 Days ago',
+                      company: 'TechNova',
                       action: 'Created Lead',
                       isCreated: true,
+                      isFirst: true,
+                      isLast: false,
+                      color: Colors.green,
                     ),
                     ActivityItem(
                       timeAgo: '3 Days ago',
-                      action: 'updated lead status from New Lead From Campaign to Not Qualified',
+                      company: 'EcoSolutions',
+                      action: 'updated lead status from New',
                       isCreated: false,
+                      isFirst: false,
+                      isLast: false,
+                      color: Colors.green,
                     ),
                     ActivityItem(
                       timeAgo: '3 Days ago',
-                      action: 'updated lead status from New Lead From Campaign to Not Qualified',
+                      company: 'FinanceHub',
+                      action: 'updated lead status from New',
                       isCreated: false,
+                      isFirst: false,
+                      isLast: true,
+                      color: Colors.white,
                     ),
                     ActivityItem(
-                      timeAgo: '3 Days ago',
+                      timeAgo: '4 Days ago',
+                      company: 'HealthCare Plus',
                       action: 'Created Lead',
                       isCreated: true,
+                      isFirst: true,
+                      isLast: false,
+                      color: Colors.green,
                     ),
                   ],
-                ),
-              ),
-              SizedBox(height: 16),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Activity',
-                    contentPadding: EdgeInsets.all(12),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Save'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
                 ),
               ),
             ],
@@ -73,79 +63,89 @@ class ActivityLogTab extends StatelessWidget {
 
 class ActivityItem extends StatelessWidget {
   final String timeAgo;
+  final String company;
   final String action;
   final bool isCreated;
+  final bool isFirst;
+  final bool isLast;
+  final Color color;
 
   const ActivityItem({
     Key? key,
     required this.timeAgo,
+    required this.company,
     required this.action,
     required this.isCreated,
+    required this.isFirst,
+    required this.isLast,
+    required this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+    return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Column(
-            children: [
-              Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
+          SizedBox(
+            width: 20,
+            child: Column(
+              children: [
+                if (!isFirst) Expanded(child: Container(width: 2, color: Colors.green)),
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color,
+                  ),
                 ),
-              ),
-              Container(
-                width: 2,
-                height: 40,
-                color: Colors.grey[300],
-              ),
-            ],
+                if (!isLast) Expanded(child: Container(width: 2, color: color)),
+              ],
+            ),
           ),
           SizedBox(width: 16),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  timeAgo,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.orange,
-                      radius: 12,
-                      child: Icon(Icons.person, size: 16, color: Colors.white),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    timeAgo,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
                     ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          style: DefaultTextStyle.of(context).style,
-                          children: [
-                            TextSpan(
-                              text: 'Go Grow ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(text: isCreated ? '- ' : ''),
-                            TextSpan(text: action),
-                          ],
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.orange,
+                        radius: 12,
+                        child: Icon(Icons.person, size: 16, color: Colors.white),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: DefaultTextStyle.of(context).style,
+                            children: [
+                              TextSpan(
+                                text: '$company ',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: isCreated ? '- ' : ''),
+                              TextSpan(text: action),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

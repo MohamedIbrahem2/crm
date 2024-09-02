@@ -5,6 +5,8 @@ import 'package:sales_crm/core/constants/app_colors.dart';
 import 'package:sales_crm/core/helpers/extensions.dart';
 import 'package:sales_crm/core/routing/app_routes.dart';
 
+import '../../../../core/constants/app_assets.dart';
+
 class AuthPageBody extends StatefulWidget {
   const AuthPageBody({super.key});
 
@@ -51,7 +53,7 @@ class _AuthPageBodyState extends State<AuthPageBody> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(height: 60.0),
-                Image.network('https://go-gogrow.com/wp-content/uploads/2024/04/cropped-GO-GO-GROW-05-03-1.png', height: 220),
+                Image.asset(AppAssets.appLogo, height: 220),
                 const SizedBox(height: 48.0),
                 const Text(
                   'Login',

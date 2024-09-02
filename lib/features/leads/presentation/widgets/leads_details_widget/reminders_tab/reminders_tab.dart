@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sales_crm/core/constants/app_colors.dart';
 import 'package:sales_crm/core/helpers/extensions.dart';
 
 import '../../../../../../core/routing/app_routes.dart';
@@ -10,10 +11,6 @@ class RemindersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Lead Reminder'),
-        backgroundColor: Colors.green,
-      ),
       body: Column(
         children: [
           Padding(
@@ -26,7 +23,7 @@ class RemindersTab extends StatelessWidget {
               icon: Icon(Icons.notifications_active),
               label: Text('Set Lead Reminder'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.primaryYellow,
               ),
             ),
           ),
@@ -34,14 +31,14 @@ class RemindersTab extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text('#')),
                   DataColumn(label: Text('Description')),
                   DataColumn(label: Text('Date')),
                   DataColumn(label: Text('Remind')),
                   DataColumn(label: Text('Is Notified?')),
                 ],
-                rows: [
+                rows: const [
                   DataRow(cells: [
                     DataCell(Text('1')),
                     DataCell(Text(
