@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../pages/tickets_details_page.dart';
 import 'attachment_item_widget.dart';
 
 class AttachmentsWidget extends StatelessWidget {

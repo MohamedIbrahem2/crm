@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sales_crm/core/routing/app_routes.dart';
 import 'package:sales_crm/features/auth/presentation/pages/auth_page.dart';
@@ -8,10 +7,8 @@ import 'package:sales_crm/features/leads/presentation/pages/leads_page.dart';
 import '../../features/calendar/presentation/pages/calendar_page.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
 import '../../features/leads/presentation/pages/laeds_details_page.dart';
-import '../../features/leads/presentation/pages/laeds_details_page.dart';
 import '../../features/leads/presentation/widgets/laeds_import/leads_imoprt.dart';
 import '../../features/leads/presentation/widgets/leads_details_widget/reminders_tab/add_reminder.dart';
-import '../../features/leads/presentation/widgets/leads_details_widget/reminders_tab/reminders_tab.dart';
 import '../../features/leads/presentation/widgets/leads_widgets/add_lead_widget.dart';
 import '../../features/projects/presentation/pages/project_page.dart';
 import '../../features/tickets/presentation/pages/tickets_details_page.dart';
@@ -35,7 +32,7 @@ class OnGenerateRoute {
         );
       case AppRoutes.leadsDetailsRoute:
         return MaterialPageRoute(
-          builder: (_) =>  LeadDetailsScreen(),
+          builder: (_) =>  const LeadDetailsScreen(),
           settings: settings,
         );
       case AppRoutes.leadsAddRoute:
@@ -65,7 +62,7 @@ class OnGenerateRoute {
         );
       case AppRoutes.ticketsRoute:
         return MaterialPageRoute(
-          builder: (_) =>   TicketsPage(),
+          builder: (_) =>   const TicketsPage(),
           settings: settings,
         );
       case AppRoutes.ticketsDetailsRoute:
@@ -75,7 +72,7 @@ class OnGenerateRoute {
         );
       case AppRoutes.calendarRoute:
         return MaterialPageRoute(
-          builder: (_) =>    CalendarPage(),
+          builder: (_) =>    const CalendarPage(),
           settings: settings,
         );
       case AppRoutes.todoRoute:

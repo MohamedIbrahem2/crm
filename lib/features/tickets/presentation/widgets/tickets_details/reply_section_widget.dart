@@ -7,10 +7,10 @@ class ReplySectionWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Reply to:', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 8),
+        const Text('Reply to:', style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[300]!),
             borderRadius: BorderRadius.circular(4),
@@ -22,7 +22,7 @@ class ReplySectionWidget extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         const TextField(
           decoration: InputDecoration(
             hintText: 'Type your reply here...',
@@ -33,11 +33,11 @@ class ReplySectionWidget extends StatelessWidget {
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {},
-          child: Text('Send'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
-            minimumSize: Size(double.infinity, 48),
+            minimumSize: const Size(double.infinity, 48),
           ),
+          child: const Text('Send'),
         ),
       ],
     );

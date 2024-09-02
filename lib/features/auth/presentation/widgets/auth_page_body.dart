@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/core/app.dart';
 import 'package:sales_crm/core/constants/app_colors.dart';
 import 'package:sales_crm/core/helpers/extensions.dart';
 import 'package:sales_crm/core/routing/app_routes.dart';
@@ -125,7 +124,6 @@ class _AuthPageBodyState extends State<AuthPageBody> {
                 ),
                 const SizedBox(height: 24.0),
                 ElevatedButton(
-                  child: const Text('Sign In', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryYellow,
                     padding: EdgeInsets.symmetric(vertical: 14.0.h),
@@ -140,6 +138,7 @@ class _AuthPageBodyState extends State<AuthPageBody> {
                     //
                     // }
                   },
+                  child: const Text('Sign In', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

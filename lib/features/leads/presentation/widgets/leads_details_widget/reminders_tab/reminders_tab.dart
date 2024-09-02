@@ -20,8 +20,8 @@ class RemindersTab extends StatelessWidget {
                 print('Close button pressed');
                 context.pushNamed(AppRoutes.leadsAddReminderRoute);
               },
-              icon: Icon(Icons.notifications_active),
-              label: Text('Set Lead Reminder'),
+              icon: const Icon(Icons.notifications_active),
+              label: const Text('Set Lead Reminder'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryYellow,
               ),

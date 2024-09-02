@@ -8,17 +8,17 @@ class TicketInfoWidget extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: Colors.purple[100],
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text('GG', style: TextStyle(color: Colors.purple[800], fontWeight: FontWeight.bold)),
         ),
-        SizedBox(width: 8),
-        Text('Go Grow', style: TextStyle(fontWeight: FontWeight.bold)),
-        Spacer(),
-        Text('2 hours ago', style: TextStyle(color: Colors.grey)),
+        const SizedBox(width: 8),
+        const Text('Go Grow', style: TextStyle(fontWeight: FontWeight.bold)),
+        const Spacer(),
+        const Text('2 hours ago', style: TextStyle(color: Colors.grey)),
       ],
     );
   }

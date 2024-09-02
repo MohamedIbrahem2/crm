@@ -6,8 +6,8 @@ class LeadImport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Import Leads')),
-      body: SingleChildScrollView(
+      appBar: AppBar(title: const Text('Import Leads')),
+      body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -31,9 +31,11 @@ class LeadImport extends StatelessWidget {
 }
 
 class ImportInstructions extends StatelessWidget {
+  const ImportInstructions({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return const Card(
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -58,16 +60,18 @@ class ImportInstructions extends StatelessWidget {
 }
 
 class ImportLeadsSection extends StatelessWidget {
+  const ImportLeadsSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('# Import Leads', style: TextStyle(fontWeight: FontWeight.bold)),
+        const Text('# Import Leads', style: TextStyle(fontWeight: FontWeight.bold)),
         ElevatedButton(
           onPressed: () {},
-          child: Text('Download Sample'),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+          child: const Text('Download Sample'),
         ),
       ],
     );
@@ -75,12 +79,14 @@ class ImportLeadsSection extends StatelessWidget {
 }
 
 class SampleDataTable extends StatelessWidget {
+  const SampleDataTable({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        columns: [
+        columns: const [
           DataColumn(label: Text('Name')),
           DataColumn(label: Text('Position')),
           DataColumn(label: Text('Email Address')),
@@ -90,7 +96,7 @@ class SampleDataTable extends StatelessWidget {
           DataColumn(label: Text('Company')),
           DataColumn(label: Text('City')),
         ],
-        rows: [
+        rows: const [
           DataRow(cells: [
             DataCell(Text('Sample Data')),
             DataCell(Text('Sample Data')),
@@ -108,28 +114,32 @@ class SampleDataTable extends StatelessWidget {
 }
 
 class FileUploadSection extends StatelessWidget {
+  const FileUploadSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Choose CSV File'),
-        SizedBox(height: 8),
+        const Text('Choose CSV File'),
+        const SizedBox(height: 8),
         OutlinedButton(
           onPressed: () {},
-          child: Text('Choose File'),
+          child: const Text('Choose File'),
         ),
-        SizedBox(height: 4),
-        Text('No File Chosen', style: TextStyle(color: Colors.grey)),
+        const SizedBox(height: 4),
+        const Text('No File Chosen', style: TextStyle(color: Colors.grey)),
       ],
     );
   }
 }
 
 class FallbackFields extends StatelessWidget {
+  const FallbackFields({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownField(label: 'Status (fallback)'),
@@ -145,7 +155,7 @@ class FallbackFields extends StatelessWidget {
 class DropdownField extends StatelessWidget {
   final String label;
 
-  const DropdownField({Key? key, required this.label}) : super(key: key);
+  const DropdownField({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +163,15 @@ class DropdownField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Select...', style: TextStyle(color: Colors.grey)),

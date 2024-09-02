@@ -11,14 +11,14 @@ class ProposalsTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildFileItem('doc.pdf', 'PDF', '29 KB', '2 hrs ago'),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             _buildFileItem('image.jpg', '', '29 KB', '2 hrs ago', hasIcon: true),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               'Upload Proposal',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildUploadArea(),
           ],
         ),
@@ -28,7 +28,7 @@ class ProposalsTab extends StatelessWidget {
 
   Widget _buildFileItem(String name, String type, String size, String time, {bool hasIcon = false}) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
@@ -47,24 +47,24 @@ class ProposalsTab extends StatelessWidget {
                   ? Icon(Icons.image, color: Colors.grey[600])
                   : Text(
                 type,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text('$size • $time', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
               ],
             ),
           ),
           Icon(Icons.visibility_outlined, color: Colors.grey[600]),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Icon(Icons.file_download_outlined, color: Colors.grey[600]),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Icon(Icons.delete_outline, color: Colors.grey[600]),
         ],
       ),
@@ -83,14 +83,14 @@ class ProposalsTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.cloud_upload_outlined, size: 40, color: Colors.grey[600]),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text('Click to upload or drag and drop', style: TextStyle(color: Colors.grey[600])),
           ],
         ),

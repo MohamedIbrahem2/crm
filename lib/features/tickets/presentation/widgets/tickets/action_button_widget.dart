@@ -1,9 +1,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:sales_crm/core/helpers/extensions.dart';
-import 'package:sales_crm/core/routing/app_routes.dart';
-import 'package:sales_crm/features/leads/presentation/pages/leads_page.dart';
 
 class ActionButtonWidget extends StatelessWidget {
   final Color color;
@@ -20,7 +17,7 @@ class ActionButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
@@ -28,7 +25,7 @@ class ActionButtonWidget extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: 16, color: color),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(fontSize: 12, color: color),

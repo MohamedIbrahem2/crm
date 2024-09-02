@@ -12,10 +12,10 @@ class TicketsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      drawer: DrawerPage(),
+      drawer: const DrawerPage(),
       appBar: AppBar(
         backgroundColor: AppColors.primaryYellow,
-        title: Text('Tickets'),
+        title: const Text('Tickets'),
       ),
       body: const TicketsPageBody(),
     );

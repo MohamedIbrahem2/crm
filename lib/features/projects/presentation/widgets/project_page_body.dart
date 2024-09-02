@@ -12,16 +12,16 @@ class ProjectPageBody extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          ProjectSummaryHeader(),
+          const ProjectSummaryHeader(),
           SizedBox(height: 18.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Projects', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Projects', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.filter_list),
-                label: Text('Filter'),
+                icon: const Icon(Icons.filter_list),
+                label: const Text('Filter'),
               ),
             ],
           ),

@@ -14,8 +14,8 @@ class TicketItemWidget extends StatelessWidget {
         context.pushNamed(AppRoutes.ticketsDetailsRoute);
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 16),
-        padding: EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -24,7 +24,7 @@ class TicketItemWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 3,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -34,7 +34,7 @@ class TicketItemWidget extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.purple[100],
                     borderRadius: BorderRadius.circular(4),
@@ -44,24 +44,24 @@ class TicketItemWidget extends StatelessWidget {
                     style: TextStyle(color: Colors.purple[800], fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(width: 8),
-                Text(
+                const SizedBox(width: 8),
+                const Text(
                   'Go Grow',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Text(
                   '2 mins ago',
                   style: TextStyle(color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Hi, I need help to process the payment visa...',
               style: TextStyle(color: Colors.grey[600]),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(

@@ -8,7 +8,7 @@ class ActivityLogTab extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Expanded(
@@ -71,7 +71,7 @@ class ActivityItem extends StatelessWidget {
   final Color color;
 
   const ActivityItem({
-    Key? key,
+    super.key,
     required this.timeAgo,
     required this.company,
     required this.action,
@@ -79,7 +79,7 @@ class ActivityItem extends StatelessWidget {
     required this.isFirst,
     required this.isLast,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class ActivityItem extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
@@ -118,15 +118,15 @@ class ActivityItem extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Colors.orange,
                         radius: 12,
                         child: Icon(Icons.person, size: 16, color: Colors.white),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: RichText(
                           text: TextSpan(
@@ -134,7 +134,7 @@ class ActivityItem extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: '$company ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               TextSpan(text: isCreated ? '- ' : ''),
                               TextSpan(text: action),

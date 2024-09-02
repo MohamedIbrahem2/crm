@@ -10,7 +10,7 @@ class ProjectItem extends StatelessWidget {
   final Color color;
 
   const ProjectItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.status,
@@ -18,12 +18,12 @@ class ProjectItem extends StatelessWidget {
     required this.date,
     required this.company,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(color: color, width: 4),
@@ -35,9 +35,9 @@ class ProjectItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -46,17 +46,17 @@ class ProjectItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(description, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           LinearProgressIndicator(value: progress),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Row(
             children: [
               Icon(Icons.calendar_today, size: 12, color: Colors.grey[600]),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Text(date, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-              Spacer(),
+              const Spacer(),
               Text(company, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
             ],
           ),

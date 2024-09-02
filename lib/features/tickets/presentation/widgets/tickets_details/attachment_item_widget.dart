@@ -11,7 +11,7 @@ class AttachmentItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(4),
@@ -24,7 +24,7 @@ class AttachmentItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label),
-              Text(size, style: TextStyle(color: Colors.grey, fontSize: 12)),
+              Text(size, style: const TextStyle(color: Colors.grey, fontSize: 12)),
             ],
           ),
           const SizedBox(width: 8),

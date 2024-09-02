@@ -6,12 +6,14 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../drawer/presentation/pages/drawer_page.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
@@ -36,7 +38,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       drawer: const DrawerPage(),
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: const Text('Calendar'),
         centerTitle: true,
       ),
       body: Column(
@@ -54,7 +56,7 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
             eventLoader: _getEventsForDay,
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               todayDecoration: BoxDecoration(
                 color: Colors.blue,
                 shape: BoxShape.circle,
@@ -68,7 +70,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 shape: BoxShape.circle,
               ),
             ),
-            headerStyle: HeaderStyle(
+            headerStyle: const HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
             ),
@@ -87,7 +89,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         : Colors.red,
                     child: Text(
                       event.type == EventType.start ? 'S' : 'E',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 );

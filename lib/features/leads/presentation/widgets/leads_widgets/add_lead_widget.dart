@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/core/app.dart';
 import 'package:sales_crm/core/constants/app_colors.dart';
 
 class AddLeadScreen extends StatefulWidget {
@@ -51,7 +50,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create New Lead'),
+        title: const Text('Create New Lead'),
         backgroundColor: AppColors.primaryYellow
       ),
       body: SingleChildScrollView(
@@ -103,7 +102,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }

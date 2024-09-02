@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/chat_enitiy.dart';
 import '../widgets/chat_details/chat_details_page_body.dart';
-import 'chat_page.dart';
 
 class ChatDetailsPage extends StatelessWidget {
   final Chat chat;

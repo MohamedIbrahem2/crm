@@ -17,24 +17,24 @@ class _NoteTabState extends State<NoteTab> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextField(
                 controller: _noteController,
                 maxLines: 3,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your note here...',
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: RadioListTile<int>(
-                      title: Text('I got in touch with this lead'),
+                      title: const Text('I got in touch with this lead'),
                       value: 0,
                       groupValue: _selectedOption,
                       onChanged: (value) => setState(() => _selectedOption = value!),
@@ -46,7 +46,7 @@ class _NoteTabState extends State<NoteTab> {
                 children: [
                   Expanded(
                     child: RadioListTile<int>(
-                      title: Text('I have not contacted this lead'),
+                      title: const Text('I have not contacted this lead'),
                       value: 1,
                       groupValue: _selectedOption,
                       onChanged: (value) => setState(() => _selectedOption = value!),
@@ -54,25 +54,25 @@ class _NoteTabState extends State<NoteTab> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
-                child: Text('Add Note'),
                 onPressed: () {
                   // Implement note adding functionality
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryYellow,
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
+                child: const Text('Add Note'),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               ListView.separated(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 4,
-                separatorBuilder: (context, index) => Divider(),
+                separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
-                  return NoteItem();
+                  return const NoteItem();
                 },
               ),
             ],
@@ -84,9 +84,11 @@ class _NoteTabState extends State<NoteTab> {
 }
 
 class NoteItem extends StatelessWidget {
+  const NoteItem({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sales_crm/core/helpers/extensions.dart';
 
-import '../../../../../../core/routing/app_routes.dart';
 
 
 class AddReminder extends StatelessWidget {
@@ -10,10 +8,10 @@ class AddReminder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Set Lead Reminder'),
+        title: const Text('Set Lead Reminder'),
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
           },
         ),
@@ -23,7 +21,7 @@ class AddReminder extends StatelessWidget {
         child: Column(
           children: [
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Date to be notified',
                 suffixIcon: Icon(Icons.calendar_today),
               ),
@@ -31,7 +29,7 @@ class AddReminder extends StatelessWidget {
                 // Handle date picker here
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               items: ['Go Grow', 'Another Option']
                   .map((String value) => DropdownMenuItem<String>(
@@ -42,19 +40,19 @@ class AddReminder extends StatelessWidget {
               onChanged: (String? newValue) {
                 // Handle reminder change
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Set reminder to',
               ),
             ),
-            SizedBox(height: 16),
-            TextField(
+            const SizedBox(height: 16),
+            const TextField(
               maxLines: 3,
               decoration: InputDecoration(
                 labelText: 'Description',
                 alignLabelWithHint: true,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Checkbox(
@@ -63,10 +61,10 @@ class AddReminder extends StatelessWidget {
                     // Handle checkbox state change
                   },
                 ),
-                Text('Send also an email for this reminder'),
+                const Text('Send also an email for this reminder'),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -74,14 +72,14 @@ class AddReminder extends StatelessWidget {
                   onPressed: () {
                     // Handle Close button press
                   },
-                  child: Text('Close'),
+                  child: const Text('Close'),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
                     // Handle Save button press
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
                 ),
               ],
             ),

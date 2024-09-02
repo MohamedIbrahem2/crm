@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sales_crm/core/constants/app_colors.dart';
@@ -13,6 +12,8 @@ import '../widgets/leads_details_widget/reminders_tab/reminders_tab.dart';
 //import 'package:file_picker/file_picker.dart';
 
 class LeadDetailsScreen extends StatefulWidget {
+  const LeadDetailsScreen({super.key});
+
   @override
   _LeadDetailsScreenState createState() => _LeadDetailsScreenState();
 }
@@ -45,7 +46,7 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
     } catch (e) {
       print('Error reading file: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating from file')),
+        const SnackBar(content: Text('Error updating from file')),
       );
     }
   }
@@ -62,7 +63,7 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
         title: const Text('Lead Details'),
         actions: [
           IconButton(
-            icon: Icon(Icons.upload_file),
+            icon: const Icon(Icons.upload_file),
             onPressed: _updateFromFile,
           ),
         ],
@@ -108,7 +109,9 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
 
   @override
   void dispose() {
-    controllers.values.forEach((controller) => controller.dispose());
+    for (var controller in controllers.values) {
+      controller.dispose();
+    }
     _tabController.dispose();
     super.dispose();
   }

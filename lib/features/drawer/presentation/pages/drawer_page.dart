@@ -17,7 +17,7 @@ class DrawerPage extends StatelessWidget {
         padding: EdgeInsets.zero,
         children:  <Widget>[
            DrawerHeader(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.white,
             ),
             child:Image.asset(AppAssets.drawerLogo,width: 100,height: 100,),
