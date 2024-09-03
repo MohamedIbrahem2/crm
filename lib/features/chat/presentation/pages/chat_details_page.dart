@@ -3,16 +3,40 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/chat_enitiy.dart';
 import '../widgets/chat_details/chat_details_page_body.dart';
 
-class ChatDetailsPage extends StatelessWidget {
+class ChatDetailsPage extends StatefulWidget {
   final Chat chat;
 
   const ChatDetailsPage({super.key, required this.chat});
 
   @override
+  _ChatDetailsPageState createState() => _ChatDetailsPageState();
+}
+
+class _ChatDetailsPageState extends State<ChatDetailsPage> {
+  final TextEditingController _messageController = TextEditingController();
+  bool _isTyping = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _messageController.addListener(() {
+      setState(() {
+        _isTyping = _messageController.text.isNotEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(chat.name),
+        title: Text(widget.chat.name),
         actions: [
           IconButton(icon: const Icon(Icons.videocam), onPressed: () {}),
           IconButton(icon: const Icon(Icons.call), onPressed: () {}),
@@ -24,7 +48,7 @@ class ChatDetailsPage extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: const  [
+              children: const [
                 ChatDetailsPageBody(
                   message: "Hey there!",
                   isMe: false,
@@ -53,22 +77,36 @@ class ChatDetailsPage extends StatelessWidget {
                   icon: const Icon(Icons.emoji_emotions),
                   onPressed: () {},
                 ),
-                const Expanded(
+                Expanded(
                   child: TextField(
+                    controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Type a message',
                       border: InputBorder.none,
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.attach_file),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.camera_alt),
-                  onPressed: () {},
-                ),
+                if (_isTyping)
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      // Handle send action
+                      _messageController.clear();
+                      setState(() {
+                        _isTyping = false;
+                      });
+                    },
+                  )
+                else ...[
+                  IconButton(
+                    icon: const Icon(Icons.attach_file),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt),
+                    onPressed: () {},
+                  ),
+                ],
               ],
             ),
           ),

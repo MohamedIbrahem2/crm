@@ -30,31 +30,31 @@ class _NoteTabState extends State<NoteTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile<int>(
-                      title: const Text('I got in touch with this lead'),
-                      value: 0,
-                      groupValue: _selectedOption,
-                      onChanged: (value) => setState(() => _selectedOption = value!),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile<int>(
-                      title: const Text('I have not contacted this lead'),
-                      value: 1,
-                      groupValue: _selectedOption,
-                      onChanged: (value) => setState(() => _selectedOption = value!),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: RadioListTile<int>(
+              //         title: const Text('I got in touch with this lead'),
+              //         value: 0,
+              //         groupValue: _selectedOption,
+              //         onChanged: (value) => setState(() => _selectedOption = value!),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: RadioListTile<int>(
+              //         title: const Text('I have not contacted this lead'),
+              //         value: 1,
+              //         groupValue: _selectedOption,
+              //         onChanged: (value) => setState(() => _selectedOption = value!),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   // Implement note adding functionality
