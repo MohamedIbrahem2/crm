@@ -14,7 +14,7 @@ Widget build(BuildContext context) {
     useInheritedMediaQuery: true,
     builder: (context, child) {
       return MaterialApp(
-        title: 'Currency&Gold',
+        title: 'sales crm',
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.authRoute,
         theme: ThemeData.light().copyWith(

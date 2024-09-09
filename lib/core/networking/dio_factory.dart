@@ -31,7 +31,6 @@ class DioFactory {
     dio?.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'x-access-token': ApiConstants.apiAccessKeyForGold,
     };
   }
 

@@ -3,17 +3,12 @@ class ApiConstants {
   const ApiConstants._();
 
   //-----------------Base-Url----------------//
-  static const String apiBaseUrlForCurrency = 'http://apilayer.net/api/live';
-  static const String apiBaseUrlForGold = 'https://www.goldapi.io/api/';
+  static const String apiBaseUrl = 'http://apilayer.net/api/';
 
-  //-----------------Access-Key----------------//
-  static const String apiAccessKeyForCurrency = '7891b48f3d4505edebd050c2c2da4e71';
-  static const String apiAccessKeyForGold = 'goldapi-50psm0803axf-io';
+  //-----------------Endpoints----------------//
 
-
-  //-----------------Home-Endpoint----------------//
-  static const String currencyEndpoint = '?access_key=${ApiConstants.apiAccessKeyForCurrency}&currencies=EGP,USD,EUR,GBP,CAD,PLN,CNY,INR,BRL,JPY';
-  static const String goldEndpoint = 'XAU';
+  //auth
+  static const String loginEndpoint = 'login';
 
 
 

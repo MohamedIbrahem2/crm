@@ -3,23 +3,29 @@ import 'package:equatable/equatable.dart';
 import 'package:sales_crm/core/networking/api_constants.dart';
 
 
-class Failure extends Equatable{
-  final int? statusCode;
+class Failure extends Equatable {
   final String? message;
+  final Map<String, String>? errors;  // Add this field to handle specific field errors
 
   const Failure({
-    this.statusCode,
     this.message,
+    this.errors,
   });
 
-  factory Failure.fromJson(Map<String, dynamic> json) => Failure(
-    statusCode: json["code"],
-    message: json["info"],
-  );
+  factory Failure.fromJson(Map<String, dynamic> json) {
+    return Failure(
+      message: json["message"],
+      errors: json.containsKey('errors')
+          ? (json['errors'] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, value.toString()))
+          : null,
+    );
+  }
 
   @override
-  List<Object?> get props => [statusCode, message];
+  List<Object?> get props => [message, errors];
 }
+
 
 class ServerFailure  {
   static Failure  handle(dynamic error) {
@@ -52,19 +58,26 @@ class ServerFailure  {
   }
 
   static Failure _handleError(int? statusCode, dynamic error) {
-    if (error != null && error is Map<String, dynamic> && error.containsKey('error')) {
-      final errorInfo = error['error'];
+    if (error != null && error is Map<String, dynamic>) {
+      String message = error['message'] ?? "Unknown error occurred";
+      Map<String, String>? errors;
+
+      if (error.containsKey('errors')) {
+        errors = (error['errors'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, value.toString()));
+      }
+
       return Failure(
-        message: errorInfo['info'] ?? "Unknown error occurred",
-        statusCode: errorInfo['code'],
+        message: message,
+        errors: errors,
       );
     } else {
       return Failure(
         message: "Unknown error occurred",
-        statusCode: statusCode,
       );
     }
   }
+
 }
 
 
