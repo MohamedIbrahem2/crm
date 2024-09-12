@@ -12,21 +12,22 @@ class DrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: 200,
       backgroundColor: AppColors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children:  <Widget>[
            DrawerHeader(
+             padding: const EdgeInsets.all(45),
             decoration: const BoxDecoration(
               color: AppColors.white,
             ),
-            child:Image.asset(AppAssets.drawerLogo,width: 100,height: 100,),
+            child:Image.asset(AppAssets.appLogo,width: 100,height: 100,),
           ),
           ListTile(
             title: const Text('leads',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.leaderboard),
             onTap: () {
@@ -37,7 +38,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('chat',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.chat),
             onTap: () {
@@ -48,7 +48,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('calender',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.calendar_today),
             onTap: () {
@@ -59,7 +58,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('tickets',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.confirmation_number),
             onTap: () {
@@ -70,7 +68,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('ToDo',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.check_circle),
             onTap: () {
@@ -81,7 +78,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('profile',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.person),
             onTap: () {
@@ -93,7 +89,6 @@ class DrawerPage extends StatelessWidget {
             title: const Text('logout',style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),),
             leading: const Icon(Icons.logout),
             onTap: () {

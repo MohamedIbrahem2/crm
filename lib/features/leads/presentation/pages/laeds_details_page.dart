@@ -61,12 +61,6 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text('Lead Details'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.upload_file),
-            onPressed: _updateFromFile,
-          ),
-        ],
       ),
       body: Column(
         children: [
