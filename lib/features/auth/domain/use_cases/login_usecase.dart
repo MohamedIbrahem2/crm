@@ -20,21 +20,27 @@ class LoginUesCase extends UseCase<ResponseLoginEntity, LoginParameters> {
 class LoginParameters extends Equatable {
   final String email;
   final String password;
-  final String? device;
-  final String location;
+   final String? device;
+   final String ipAddress;
 
   const LoginParameters({
     required this.email,
     required this.password,
-    required this.device,
-    required this.location,
+     required this.device,
+     required this.ipAddress,
   });
 
   @override
   List<Object?> get props => [
         email,
         password,
-        device,
-        location,
+         device,
+        ipAddress,
       ];
+  Map<String, dynamic> toJson() => {
+    "email": email,
+    "password": password,
+    "device":device,
+    "ip_address" : ipAddress,
+  };
 }

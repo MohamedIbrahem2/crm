@@ -3,7 +3,7 @@ class ApiConstants {
   const ApiConstants._();
 
   //-----------------Base-Url----------------//
-  static const String apiBaseUrl = 'http://apilayer.net/api/';
+  static const String apiBaseUrl = 'http://back.growcrm.tech/api/';
 
   //-----------------Endpoints----------------//
 

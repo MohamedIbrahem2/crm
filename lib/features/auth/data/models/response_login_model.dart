@@ -6,7 +6,7 @@ class ResponseLoginModel extends ResponseLoginEntity {
   factory ResponseLoginModel.fromJson(Map<String, dynamic> json) {
     return ResponseLoginModel(
       token: json['data']['access_token'],
-      moduleId: json['data']['user']['module_id'],
+      moduleId: json['data']['user']['module_id'].toString(),  // Convert int to String
       message: json['message'],
     );
   }

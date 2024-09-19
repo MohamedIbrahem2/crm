@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.gogogrow.sales_crm.sales_crm"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

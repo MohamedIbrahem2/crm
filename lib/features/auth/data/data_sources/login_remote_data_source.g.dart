@@ -14,7 +14,7 @@ class _LoginRemoteDataSource implements LoginRemoteDataSource {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://apilayer.net/api/';
+    baseUrl ??= 'http://back.growcrm.tech/api/';
   }
 
   final Dio _dio;
@@ -28,7 +28,8 @@ class _LoginRemoteDataSource implements LoginRemoteDataSource {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = parameters;
+    final _data = <String, dynamic>{};
+    _data.addAll(parameters.toJson());
     final _options = _setStreamType<ResponseLoginModel>(Options(
       method: 'POST',
       headers: _headers,
