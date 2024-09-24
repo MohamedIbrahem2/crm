@@ -150,11 +150,11 @@ class _AuthPageBodyState extends State<AuthPageBody> {
                             }),
                         const Text('Remember Me'),
                         const Spacer(),
-                        TextButton(
-                          child: const Text('Forgot Password?',
-                              style: TextStyle(color: AppColors.primaryYellow)),
-                          onPressed: () {},
-                        ),
+                        // TextButton(
+                        //   child: const Text('Forgot Password?',
+                        //       style: TextStyle(color: AppColors.primaryYellow)),
+                        //   onPressed: () {},
+                        // ),
                       ],
                     ),
                     const SizedBox(height: 24.0),

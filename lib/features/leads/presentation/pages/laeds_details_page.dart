@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sales_crm/core/constants/app_colors.dart';
 import 'package:sales_crm/features/leads/presentation/widgets/leads_details_widget/contract_tab.dart';
 
+import '../../data/models/leads_model.dart';
+import '../cubit/proposal_cubit.dart';
 import '../widgets/leads_details_widget/acitivity_log_tab.dart';
 import '../widgets/leads_details_widget/note_tap.dart';
 import '../widgets/leads_details_widget/profile_tab.dart';
@@ -12,13 +15,16 @@ import '../widgets/leads_details_widget/reminders_tab/reminders_tab.dart';
 //import 'package:file_picker/file_picker.dart';
 
 class LeadDetailsScreen extends StatefulWidget {
-  const LeadDetailsScreen({super.key});
+  final Lead lead;
+
+  const LeadDetailsScreen({super.key, required this.lead});
 
   @override
   _LeadDetailsScreenState createState() => _LeadDetailsScreenState();
 }
 
-class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTickerProviderStateMixin {
+class _LeadDetailsScreenState extends State<LeadDetailsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, TextEditingController> controllers = {};
 
@@ -84,9 +90,12 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: const [
-                ProfileTab(),
-                ProposalsTab(),
+              children: [
+                ProfileTab(lead: widget.lead,),
+                BlocProvider(
+                  create: (context) => FileUploadCubit(),
+                  child: ProposalsTab(),
+                ),
                 ContractTab(),
                 RemindersTab(),
                 NoteTab(),
@@ -98,7 +107,6 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen> with SingleTicker
       ),
     );
   }
-
 
 
   @override

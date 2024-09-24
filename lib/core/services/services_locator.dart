@@ -38,5 +38,6 @@ class ServicesLocator {
     //home DataSource
     sl.registerLazySingleton<LoginRemoteDataSource>(
         () => LoginRemoteDataSource(dio));
+
   }
 }

@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sales_crm/core/constants/app_assets.dart';
 import 'package:sales_crm/core/helpers/extensions.dart';
 import 'package:sales_crm/core/routing/app_routes.dart';
+import 'package:sales_crm/features/auth/presentation/cubit/login_cubit/login_cubit.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -33,7 +35,7 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.leaderboard_outlined),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              context.pushReplacementNamed(AppRoutes.leadsRoute);
             },
           ),
           ListTile(
@@ -46,7 +48,7 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.chat_bubble_outline),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              context.pushReplacementNamed(AppRoutes.chatRoute);
             },
           ),
           ListTile(
@@ -59,7 +61,7 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.calendar_today),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              context.pushReplacementNamed(AppRoutes.calendarRoute);
             },
           ),
           ListTile(
@@ -72,7 +74,7 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.confirmation_number_outlined),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              context.pushReplacementNamed(AppRoutes.ticketsRoute);
             },
           ),
           ListTile(
@@ -85,7 +87,7 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.check_circle_outline),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              context.pushReplacementNamed(AppRoutes.todoRoute);
             },
           ),
           ListTile(
@@ -98,11 +100,14 @@ class DrawerPage extends StatelessWidget {
             ),
             leading: const Icon(Icons.person_2_outlined),
             onTap: () {
-              context.pushNamed(AppRoutes.leadsRoute);
+              // context.pushReplacementNamed(AppRoutes.leadsRoute);
             },
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.read<LoginCubit>().logout();
+              Navigator.pushReplacementNamed(context, AppRoutes.authRoute);
+            },
             child: ListTile(
               leading: const Icon(Icons.logout_outlined),
               title: Text(

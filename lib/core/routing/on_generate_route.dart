@@ -31,10 +31,10 @@ class OnGenerateRoute {
           settings: settings,
         );
       case AppRoutes.leadsDetailsRoute:
-        return MaterialPageRoute(
-          builder: (_) =>  const LeadDetailsScreen(),
-          settings: settings,
-        );
+        // return MaterialPageRoute(
+        //   builder: (_) =>  const LeadDetailsScreen(),
+        //   settings: settings,
+        // );
       case AppRoutes.leadsAddRoute:
         return MaterialPageRoute(
           builder: (_) =>  const AddLeadScreen(),

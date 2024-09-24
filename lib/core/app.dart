@@ -7,6 +7,8 @@ import 'package:sales_crm/core/routing/on_generate_route.dart';
 import 'package:sales_crm/core/services/services_locator.dart';
 
 import '../features/auth/presentation/cubit/login_cubit/login_cubit.dart';
+import '../features/leads/data/repositories/leads_repository.dart';
+import '../features/leads/presentation/cubit/leads_cubit.dart';
 
 class SalesCrmApp extends StatelessWidget {
   const SalesCrmApp({super.key});
@@ -15,8 +17,13 @@ class SalesCrmApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-    return BlocProvider(
-      create: (context) => sl<LoginCubit>()..checkIfLoggedIn(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => sl<LoginCubit>()..checkIfLoggedIn(),),
+        BlocProvider(
+          create: (context) => LeadsCubit(LeadsRepository()),
+        ),
+      ],
       child: ScreenUtilInit(
         useInheritedMediaQuery: true,
         builder: (context, child) {

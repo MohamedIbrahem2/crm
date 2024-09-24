@@ -10,6 +10,8 @@ class ApiConstants {
   //auth
   static const String loginEndpoint = 'login';
 
+  static const String leadsEndpoint = "modules/1/leads";
+
 
 
 }

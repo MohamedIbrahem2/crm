@@ -15,9 +15,6 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<Either<Failure, ResponseLoginEntity>> login(LoginParameters parameters) async {
     try {
       final result = await _loginRemoteDataSource.login(parameters);
-      print('Parsed Token: ${result.token}');
-      print('Parsed Module ID: ${result.moduleId}');
-      print('Parsed Message: ${result.message}');
       return Right(result);
     } catch (e) {
       print('Error occurred: $e');
