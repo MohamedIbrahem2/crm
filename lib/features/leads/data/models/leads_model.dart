@@ -12,6 +12,7 @@ class Lead {
   final String state;
   final String zipcode;
   final String country;
+  final String leadId;
 
 
   Lead({
@@ -28,13 +29,15 @@ class Lead {
     required this.state,
     required this.zipcode,
     required this.country,
+    required this.leadId,
+
   });
 
   @override
   String toString() {
     return 'Lead(name: $name, position: $position, company: $company, amount: $amount,'
         ' status: $status, date: $date ,phone: $phone, website: $website, address: $address,'
-        ' city: $city, state: $status, zipcode: $zipcode, country: $country)';
+        ' city: $city, state: $status, zipcode: $zipcode, country: $country, leadId: $leadId)';
   }
 
   factory Lead.fromJson(Map<String, dynamic> json) {
@@ -51,7 +54,8 @@ class Lead {
     String city = json['city'] ?? 'Not specified';
     String state = json['state'] ?? 'Not specified';
     String zipcode = json['zip_code'] ?? 'Not specified';
-    String country = json['country'] ?? 'Not specified';
+    String country = json['country']['name'] ?? 'Not specified';
+    String leadId = json['id'].toString() ?? 'Not specified';
 
 
 
@@ -68,7 +72,8 @@ class Lead {
       city: city,
       state: state,
       zipcode: zipcode,
-      country: country
+      country: country,
+        leadId: leadId
     );
   }
 }

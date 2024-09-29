@@ -1,3 +1,4 @@
+import 'package:crm/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ReplySectionWidget extends StatelessWidget {
@@ -34,10 +35,10 @@ class ReplySectionWidget extends StatelessWidget {
         ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: AppColors.primaryYellow,
             minimumSize: const Size(double.infinity, 48),
           ),
-          child: const Text('Send'),
+          child: const Text('Send',style: TextStyle(color: Colors.black),),
         ),
       ],
     );

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:sales_crm/features/auth/domain/use_cases/login_usecase.dart';
+import 'package:crm/features/auth/domain/use_cases/login_usecase.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/response_login_entity.dart';

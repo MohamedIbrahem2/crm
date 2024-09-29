@@ -1,5 +1,6 @@
+import 'package:crm/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:sales_crm/core/helpers/extensions.dart';
+import 'package:crm/core/helpers/extensions.dart';
 
 import '../../../../../core/routing/app_routes.dart';
 import 'action_button_widget.dart';
@@ -17,11 +18,15 @@ class TicketItemWidget extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
+          border: Border.all(
+              width: 2,
+              color: AppColors.secondaryYellow
+          ),
+          borderRadius: BorderRadius.circular(20),
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 3,
               offset: const Offset(0, 1),

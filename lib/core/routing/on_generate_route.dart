@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:sales_crm/core/routing/app_routes.dart';
-import 'package:sales_crm/features/auth/presentation/pages/auth_page.dart';
-import 'package:sales_crm/features/leads/presentation/pages/leads_page.dart';
+import 'package:crm/core/routing/app_routes.dart';
+import 'package:crm/features/auth/presentation/pages/auth_page.dart';
+import 'package:crm/features/leads/presentation/pages/leads_page.dart';
 
 import '../../features/calendar/presentation/pages/calendar_page.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
@@ -40,11 +40,11 @@ class OnGenerateRoute {
           builder: (_) =>  const AddLeadScreen(),
           settings: settings,
         );
-      case AppRoutes.leadsAddReminderRoute:
-        return MaterialPageRoute(
-          builder: (_) =>  const AddReminder(),
-          settings: settings,
-        );
+      // case AppRoutes.leadsAddReminderRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) =>  const AddReminder(),
+      //     settings: settings,
+      //   );
       case AppRoutes.leadsImportRoute:
         return MaterialPageRoute(
           builder: (_) =>  const LeadImport(),

@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/features/leads/data/repositories/leads_repository.dart';
-import 'package:sales_crm/features/leads/presentation/cubit/leads_cubit.dart';
-import 'package:sales_crm/features/leads/presentation/widgets/leads_widgets/summary_card_widget.dart';
+import 'package:crm/features/leads/data/repositories/leads_repository.dart';
+import 'package:crm/features/leads/presentation/cubit/leads_cubit.dart';
+import 'package:crm/features/leads/presentation/widgets/leads_widgets/summary_card_widget.dart';
 
 import '../../cubit/leads_states.dart';
 import '../../cubit/status_cubit.dart';
@@ -13,16 +13,25 @@ import '../../cubit/status_state.dart';
 import '../../pages/laeds_details_page.dart';
 import 'lead_item_widget.dart';
 
-class LeadsPageBody extends StatelessWidget {
+class LeadsPageBody extends StatefulWidget {
   final ScrollController scrollController;
 
   const LeadsPageBody({super.key, required this.scrollController});
 
   @override
-  Widget build(BuildContext context) {
-    context.read<StatusCubit>().fetchStatus();
-    context.read<LeadsCubit>().fetchLeads();
+  State<LeadsPageBody> createState() => _LeadsPageBodyState();
+}
 
+
+class _LeadsPageBodyState extends State<LeadsPageBody> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StatusCubit>().fetchStatusCounts();
+    context.read<LeadsCubit>().fetchLeads(); // Only call it here
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -44,30 +53,28 @@ class LeadsPageBody extends StatelessWidget {
                   if (state is StatusLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is StatusLoaded) {
-                    final statusNames = state.statusNames;
-
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: SummaryCard(
                             iconColor: Colors.green,
-                            title: statusNames.isNotEmpty ? statusNames[0] : 'Unknown',
-                            value: '22',
+                            title: 'Converted Customers',
+                            value: state.statusCounts['converted_customers'].toString(),
                           ),
                         ),
                         Expanded(
                           child: SummaryCard(
                             iconColor: Colors.red,
-                            title: statusNames.length > 1 ? statusNames[1] : 'Unknown',
-                            value: '4',
+                            title: 'leads in processing',
+                            value: state.statusCounts['leads_in_processing'].toString(),
                           ),
                         ),
                         Expanded(
                           child: SummaryCard(
                             iconColor: Colors.green,
-                            title: statusNames.length > 2 ? statusNames[2] : 'Unknown',
-                            value: '4',
+                            title: 'lost leads',
+                            value: state.statusCounts['lost_leads'].toString(),
                           ),
                         ),
                       ],
@@ -124,29 +131,30 @@ class LeadsPageBody extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is LeadsLoaded) {
                       if (state.leads.isNotEmpty) {
-                        return ListView.separated(
-                          controller: scrollController,
-                          itemBuilder: (context, index) {
-                            final lead = state.leads[index];
-                            return GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>LeadDetailsScreen(lead: lead)));
-                              },
-                              child: LeadItem(
-                                name: lead.name,
-                                position: lead.position,
-                                company: lead.company,
-                                amount: lead.amount,
-                                source: "lead.source",
-                                status: lead.status,
-                                date: lead.date,
-                                color: _getRandomColor(),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 4.h),
-                          itemCount: state.leads.length,
+                        return RepaintBoundary(
+                          child: ListView.builder(
+                            controller: widget.scrollController,
+                            itemCount: state.leads.length,
+                            itemBuilder: (context, index) {
+                              final lead = state.leads[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => LeadDetailsScreen(lead: lead)));
+                                },
+                                child: LeadItem(
+                                  name: lead.name,
+                                  position: lead.position,
+                                  company: lead.company,
+                                  amount: lead.amount,
+                                  source: "lead.source",
+                                  status: lead.status,
+                                  date: lead.date,
+                                  color: _getRandomColor(),
+                                  moduleId: lead.leadId,
+                                ),
+                              );
+                            },
+                          ),
                         );
                       } else {
                         return const Center(child: Text('No leads available.'));
@@ -174,74 +182,6 @@ class LeadsPageBody extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildSummaryGrid() {
-    return GridView.count(
-      crossAxisCount: 1,
-      crossAxisSpacing: 5,
-      mainAxisSpacing: 2,
-      childAspectRatio: 4,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: [
-      BlocBuilder<StatusCubit, StatusState>(
-    builder: (context, state) {
-      if (state is StatusLoading) {
-        return const Center(child: CircularProgressIndicator());
-      } else if (state is StatusLoaded) {
-        final statusNames = state.statusNames;
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SummaryCard(
-              iconColor: Colors.green,
-              title: statusNames.isNotEmpty ? statusNames[0] : 'Default Title 1',
-              value: '22',
-            ),
-            SummaryCard(
-              iconColor: Colors.red,
-              title: statusNames.length > 1 ? statusNames[1] : 'Default Title 2',
-              value: '4',
-            ),
-            SummaryCard(
-              iconColor: Colors.green,
-              title: statusNames.length > 2 ? statusNames[2] : 'Default Title 3',
-              value: '4',
-            ),
-          ],
-        );
-      } else if (state is StatusError) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SummaryCard(
-              iconColor: Colors.green,
-              title: 'Error',
-              value: '22',
-            ),
-            SummaryCard(
-              iconColor: Colors.red,
-              title: 'Error',
-              value: '4',
-            ),
-            SummaryCard(
-              iconColor: Colors.green,
-              title: 'Error',
-              value: '4',
-            ),
-          ],
-        );
-      }
-      return const Center(child: Text('Status not available'));
-    },
-    ),
-
-      ],
-    );
-  }
-
-
 
   Color _getRandomColor() {
     return Color.fromARGB(

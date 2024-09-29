@@ -1,59 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/repositories/add_reminder_repository.dart';
+import '../../cubit/activity_log_cubit.dart';
 
 class ActivityLogTab extends StatelessWidget {
-  const ActivityLogTab({super.key});
+  final String leadId; // Pass the customerId to fetch specific activity logs
+
+  const ActivityLogTab({super.key, required this.leadId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: const  [
-                    ActivityItem(
-                      timeAgo: '3 Days ago',
-                      company: 'TechNova',
-                      action: 'Created Lead',
-                      isCreated: true,
-                      isFirst: true,
-                      isLast: false,
-                      color: Colors.green,
-                    ),
-                    ActivityItem(
-                      timeAgo: '3 Days ago',
-                      company: 'EcoSolutions',
-                      action: 'updated lead status from New',
-                      isCreated: false,
-                      isFirst: false,
-                      isLast: false,
-                      color: Colors.green,
-                    ),
-                    ActivityItem(
-                      timeAgo: '3 Days ago',
-                      company: 'FinanceHub',
-                      action: 'updated lead status from New',
-                      isCreated: false,
-                      isFirst: false,
-                      isLast: true,
-                      color: Colors.white,
-                    ),
-                    ActivityItem(
-                      timeAgo: '4 Days ago',
-                      company: 'HealthCare Plus',
-                      action: 'Created Lead',
-                      isCreated: true,
-                      isFirst: true,
-                      isLast: false,
-                      color: Colors.green,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    return BlocProvider(
+      create: (context) => ActivityLogCubit(ApiServiceLog())..fetchActivityLogs(leadId),
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BlocBuilder<ActivityLogCubit, ActivityLogState>(
+              builder: (context, state) {
+                if (state is ActivityLogLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is ActivityLogLoaded) {
+                  return ListView.builder(
+                    itemCount: state.logs.length,
+                    itemBuilder: (context, index) {
+                      final log = state.logs[index];
+                      return Column(
+                        children: log.activities.map((activity) {
+                          return ActivityItem(
+                            timeAgo: activity.date,
+                            company: log.user,
+                            action: activity.type,
+                            isCreated: activity.type.contains('Created Lead'),
+                            isFirst: log.activities.indexOf(activity) == 0,
+                            isLast: log.activities.indexOf(activity) == log.activities.length - 1,
+                            color: activity.type.contains('Created') ? Colors.green : Colors.grey,
+                          );
+                        }).toList(),
+                      );
+                    },
+                  );
+                } else if (state is ActivityLogError) {
+                  return Center(child: Text(state.message));
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ),
         ),
       ),
@@ -91,7 +84,7 @@ class ActivityItem extends StatelessWidget {
             width: 20,
             child: Column(
               children: [
-                if (!isFirst) Expanded(child: Container(width: 2, color: Colors.green)),
+                if (!isFirst) Expanded(child: Container(width: 2, color: color)),
                 Container(
                   width: 10,
                   height: 10,

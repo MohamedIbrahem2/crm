@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sales_crm/core/constants/app_colors.dart';
+import 'package:crm/core/constants/app_colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +16,7 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  DateTime? _lastPressedAt;
 
   Map<DateTime, List<Event>> _events = {
     DateTime(2024, 9, 3): [
@@ -39,18 +40,43 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerPage(),
-      appBar: AppBar(
-        title: Text('Calendar'),
-        backgroundColor: AppColors.primaryYellow,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildCalendar(),
-            _buildEventList(),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Check if the back button was pressed within the last 2 seconds
+        if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 2)) {
+          _lastPressedAt = DateTime.now();
+          // Show the Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Press back again to exit the app'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false; // Prevent the back navigation
+        }
+        return true; // Allow the back navigation (close the app)
+      },
+      child: Scaffold(
+        drawer: const DrawerPage(),
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 70),
+          child: AppBar(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(25),
+              ),
+            ),
+            backgroundColor: AppColors.primaryYellow,
+            title: const Text('Calendar'),
+          ),
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildCalendar(),
+              _buildEventList(),
+            ],
+          ),
         ),
       ),
     );
@@ -59,6 +85,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget _buildCalendar() {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.all(16),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -114,7 +141,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
         child: events.isEmpty
@@ -130,6 +157,7 @@ class _CalendarPageState extends State<CalendarPage> {
           itemBuilder: (context, index) {
             final event = events[index];
             return Card(
+              color: Colors.white,
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 4),
               shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sales_crm/features/drawer/presentation/pages/drawer_page.dart';
+import 'package:crm/features/drawer/presentation/pages/drawer_page.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/todo_add.dart';
@@ -16,7 +16,7 @@ class ToDoPage extends StatefulWidget {
 class _ToDoPageState extends State<ToDoPage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _isFabVisible = ValueNotifier(true);
-
+  DateTime? _lastPressedAt;
   @override
   void initState() {
     super.initState();
@@ -40,38 +40,63 @@ class _ToDoPageState extends State<ToDoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerPage(),
-      extendBodyBehindAppBar: false,
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryYellow,
-        title: const Text('To Do List'),
-      ),
-      resizeToAvoidBottomInset: true,
-      body: ToDoPageBody(scrollController: _scrollController),
-      floatingActionButton: ValueListenableBuilder<bool>(
-        valueListenable: _isFabVisible,
-        builder: (context, isVisible, child) {
-          return AnimatedOpacity(
-            opacity: isVisible ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300),
-            child: FloatingActionButton(
-              onPressed: () {
-                // Show the dialog to add a new note
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const TodoAddDialog();
-                  },
-                );
-              },
-              backgroundColor: AppColors.primaryYellow,
-              child: const Icon(
-                Icons.add,
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        // Check if the back button was pressed within the last 2 seconds
+        if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 2)) {
+          _lastPressedAt = DateTime.now();
+          // Show the Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Press back again to exit the app'),
+              duration: Duration(seconds: 2),
             ),
           );
-        },
+          return false; // Prevent the back navigation
+        }
+        return true; // Allow the back navigation (close the app)
+      },
+      child: Scaffold(
+        drawer: const DrawerPage(),
+        extendBodyBehindAppBar: false,
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 70),
+          child: AppBar(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(25),
+              ),
+            ),
+            backgroundColor: AppColors.primaryYellow,
+            title: const Text('To Do List'),
+          ),
+        ),
+        resizeToAvoidBottomInset: true,
+        body: ToDoPageBody(scrollController: _scrollController),
+        floatingActionButton: ValueListenableBuilder<bool>(
+          valueListenable: _isFabVisible,
+          builder: (context, isVisible, child) {
+            return AnimatedOpacity(
+              opacity: isVisible ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Show the dialog to add a new note
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const TodoAddDialog();
+                    },
+                  );
+                },
+                backgroundColor: AppColors.primaryYellow,
+                child: const Icon(
+                  Icons.add,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

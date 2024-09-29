@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sales_crm/features/auth/domain/repositories/login_repository.dart';
+import 'package:crm/features/auth/domain/repositories/login_repository.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usaecase/uasecase.dart';

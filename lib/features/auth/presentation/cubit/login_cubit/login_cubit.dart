@@ -2,9 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:meta/meta.dart';
-import 'package:sales_crm/features/auth/domain/use_cases/login_usecase.dart';
+import 'package:crm/features/auth/domain/use_cases/login_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/failures.dart';
@@ -42,11 +43,14 @@ class LoginCubit extends Cubit<LoginState> {
         },
             (responseLoginEntity) async {
           final token = responseLoginEntity.token;
-          print(token);
-          if (isRememberMeChecked) {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString('token', token);
+          final moduleId = responseLoginEntity.moduleId;
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('moduleId', moduleId);
+          if (kDebugMode) {
             print(token);
+          }
+          if (isRememberMeChecked) {
+            await prefs.setString('token', token);
           }
           emit(LoginSuccess(token));
         },

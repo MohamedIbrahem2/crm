@@ -3,22 +3,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_navigation/src/router_report.dart';
 
 import '../../cubit/proposal_cubit.dart';
 
 class ProposalsTab extends StatefulWidget {
-  const ProposalsTab({super.key});
+  final String leadId;
+  const ProposalsTab({super.key, required this.leadId});
 
   @override
   State<ProposalsTab> createState() => _ProposalsTabState();
 }
-
 class _ProposalsTabState extends State<ProposalsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<FileUploadCubit>(
-        create: (context) => FileUploadCubit()..fetchProposals(),
+        create: (context) => FileUploadCubit(widget.leadId)..fetchProposals(),
         child: BlocBuilder<FileUploadCubit, FileUploadState>(
           builder: (context, state) {
             return Padding(
@@ -28,27 +29,25 @@ class _ProposalsTabState extends State<ProposalsTab> {
                 children: [
                   if (state.errorMessage != null)
                     Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
-
-                  // Display the list of fetched proposals
+                  if(state.proposals == null)
+                    const Center(child: CircularProgressIndicator(),),
                   if (state.proposals != null)
-                    Expanded(
+                    state.proposals!.isNotEmpty ? Expanded(
                       child: ListView.builder(
-                        itemCount: state.proposals
-                            !.length, // Note: You can safely use .length if you know it's a list now.
+                        itemCount: state.proposals!.length,
                         itemBuilder: (context, index) {
-                          final proposal = state.proposals![index]; // Access the proposal object
-                          return _buildFileItem(
+                          final proposal = state.proposals![index];
+                          return
+                            _buildFileItem(
                               proposal['document_name'], // Accessing document_name
                               'File',
                               'Uploaded at: ${proposal['created_at']}', // Accessing created_at
-                              proposal['document_path'] ,
+                              proposal['document_path'],
                             proposal['id'],// Accessing document_path
                           );
                         },
                       ),
-                    ),
-
-
+                    ): const Center(child: Text("No Added files yet"),),
                   const SizedBox(height: 24),
                   const Text(
                     'Upload Proposal',
@@ -56,19 +55,6 @@ class _ProposalsTabState extends State<ProposalsTab> {
                   ),
                   const SizedBox(height: 16),
                   _buildUploadArea(context),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: state.isUploading
-                        ? null
-                        : () {
-                      context.read<FileUploadCubit>().uploadFile();
-                    },
-                    child: state.isUploading
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : const Text('Upload'),
-                  ),
                 ],
               ),
             );
@@ -138,7 +124,17 @@ class _ProposalsTabState extends State<ProposalsTab> {
         ),
         child: Row(
           children: [
-            Image.network(filePath, width: 40, height: 40, fit: BoxFit.cover),
+            Image.network(filePath,
+                width: 40, height: 40, fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Text(
+                    'Can\'t upload images',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                );
+              },
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -177,7 +173,7 @@ class _ProposalsTabState extends State<ProposalsTab> {
             );
 
             if (confirmDelete == true) {
-              context.read<FileUploadCubit>().deleteImage(proposalId);
+              context.read<FileUploadCubit>().deleteImageProposal(proposalId);
             }
           },
           )

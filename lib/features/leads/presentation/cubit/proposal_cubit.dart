@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FileUploadState {
   final File? file;
@@ -31,7 +32,8 @@ class FileUploadState {
 
 
 class FileUploadCubit extends Cubit<FileUploadState> {
-  FileUploadCubit() : super(FileUploadState());
+  final String leadsId;
+  FileUploadCubit(this.leadsId) : super(FileUploadState());
 
   void selectFile(File selectedFile) {
     if (selectedFile.lengthSync() <= 10 * 1024 * 1024) {
@@ -41,18 +43,22 @@ class FileUploadCubit extends Cubit<FileUploadState> {
     }
   }
 
-  Future<void> uploadFile() async {
+  Future<void> uploadFileProposal() async {
     if (state.file != null) {
 
       emit(state.copyWith(isUploading: true, errorMessage: null));
       try {
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString("token");
+        final moduleId = prefs.getString('moduleId');
+
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://back.growcrm.tech/api/modules/1/leads/1444/proposals'),
+          Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/leads/$leadsId/proposals'),
         );
 
         request.headers.addAll({
-          'Authorization': 'Bearer 193|QHc2wRxqUlPGeTLWcPb4sWJPwGW8oPzE6Qc0htXN287bd381',
+          'Authorization': 'Bearer $token',
           "Content-Type": "multipart/form-data",// Replace with your token
         });
 
@@ -87,15 +93,15 @@ class FileUploadCubit extends Cubit<FileUploadState> {
 
   // Function to fetch proposals from the API
   Future<void> fetchProposals() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
     try {
       final response = await http.get(
-        Uri.parse('http://back.growcrm.tech/api/modules/1/leads/1444/proposals'),
+        Uri.parse('https://backcrm.growcrm.tech/api/modules/1/leads/$leadsId/proposals'),
         headers: {
-          'Authorization': 'Bearer 193|QHc2wRxqUlPGeTLWcPb4sWJPwGW8oPzE6Qc0htXN287bd381',
+          'Authorization': 'Bearer $token',
         },
       );
-      print(response.body);
-
       if (response.statusCode == 200) {
         // Decode the JSON response directly to a List<dynamic>
         final List<dynamic> proposals = jsonDecode(response.body);
@@ -108,12 +114,15 @@ class FileUploadCubit extends Cubit<FileUploadState> {
       emit(state.copyWith(errorMessage: 'Error fetching proposals: $e'));
     }
   }
-  Future<void> deleteImage(int proposalId) async {
+  Future<void> deleteImageProposal(int proposalId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final moduleId = prefs.getString('moduleId');
+    final token = prefs.getString('token');
     try {
       final response = await http.delete(
-        Uri.parse('http://back.growcrm.tech/api/modules/1/leads/1444/proposals/$proposalId'),
+        Uri.parse('http://back.growcrm.tech/api/modules/$moduleId/leads/$leadsId/proposals/$proposalId'),
         headers: {
-          'Authorization': 'Bearer 93|QHc2wRxqUlPGeTLWcPb4sWJPwGW8oPzE6Qc0htXN287bd381',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );

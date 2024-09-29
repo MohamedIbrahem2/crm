@@ -1,37 +1,36 @@
-import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+// status_cubit.dart
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import '../../data/repositories/status_repository.dart';
-import 'status_state.dart'; // Make sure to import your state file
+import 'status_state.dart'; // Import the state file
 
 class StatusCubit extends Cubit<StatusState> {
   final StatusRepository statusRepository;
-  bool _isClosed = false;
 
   StatusCubit(this.statusRepository) : super(StatusInitial());
 
-  @override
-  Future<void> close() {
-    _isClosed = true; // Set the flag to true
-    return super.close();
-  }
-
-  Future<void> fetchStatus() async {
-    if (_isClosed) return; // Check if cubit is closed
-
+  Future<void> fetchStatusCounts() async {
     try {
       emit(StatusLoading());
-      final statusNames = await statusRepository.fetchStatusNames(); // Fetch status names
 
-      if (statusNames.isNotEmpty) {
-        emit(StatusLoaded(statusNames));
-      } else {
-        emit(StatusError("No status names found"));
+      // Fetch the status counts from the repository
+      final statusCounts = await statusRepository.fetchStatusCounts();
+
+      // Check if the cubit is still open before emitting a new state
+      if (!isClosed) {
+        emit(StatusLoaded(statusCounts));
       }
     } catch (e) {
-      print('Error fetching statuses: $e');
-      if (!_isClosed) emit(StatusError("Failed to load status data"));
+      // Check if the cubit is still open before emitting an error state
+      if (!isClosed) {
+        emit(StatusError('Failed to load status counts: $e'));
+      }
     }
   }
 
+  @override
+  Future<void> close() {
+    // Any additional cleanup if necessary
+    return super.close();
+  }
 }

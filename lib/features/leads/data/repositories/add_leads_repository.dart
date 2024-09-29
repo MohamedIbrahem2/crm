@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AddLeadsRepository {
   Future<ApiResponse> addLead({
     required String name,
@@ -21,23 +23,9 @@ class AddLeadsRepository {
     required int assignedTo,
     required int productRelatedId,
   }) async {
-    final url = Uri.parse('https://back.growcrm.tech/api/modules/1/product-type/2/leads');
-    print('Name: $name');
-    print('Phone: $phone');
-    print('Lead Value: $leadValue');
-    print('email: $email');
-    print('Phone: $company');
-    print('Lead Value: $city');
-    print('Name: $address');
-    print('Phone: $needs');
-    print('Lead Value: $position');
-    print('Lead Value: $state');
-    print('Lead Value: $countryId');
-    print('Lead Value: $zipCode');
-    print('Lead Value: $sourceId');
-    print('Lead Value: $statusId');
-    print('Lead Value: $assignedTo');
-    print('Lead Value: $productRelatedId');
+    final prefs = await SharedPreferences.getInstance();
+    final moduleId = prefs.getString('moduleId');
+    final url = Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/product-type/2/leads');
     final body = jsonEncode({
       'name': name,
       'phone': phone,
@@ -59,10 +47,12 @@ class AddLeadsRepository {
     });
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer 193|QHc2wRxqUlPGeTLWcPb4sWJPwGW8oPzE6Qc0htXN287bd381', // Use a valid token
+          'Authorization': 'Bearer $token', // Use a valid token
           'Content-Type': 'application/json',
         },
         body: body,

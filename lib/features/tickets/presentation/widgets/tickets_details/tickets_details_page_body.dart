@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:sales_crm/features/tickets/presentation/widgets/tickets_details/reply_section_widget.dart';
-import 'package:sales_crm/features/tickets/presentation/widgets/tickets_details/ticket_info_widget.dart';
-import 'package:sales_crm/features/tickets/presentation/widgets/tickets_details/ticket_message_widget.dart';
+import 'package:crm/features/tickets/presentation/widgets/tickets_details/reply_section_widget.dart';
+import 'package:crm/features/tickets/presentation/widgets/tickets_details/ticket_info_widget.dart';
+import 'package:crm/features/tickets/presentation/widgets/tickets_details/ticket_message_widget.dart';
 
 import 'action_widget.dart';
 import 'attachments_widget.dart';

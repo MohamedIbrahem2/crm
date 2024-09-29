@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sales_crm/core/networking/api_constants.dart';
+import 'package:crm/core/networking/api_constants.dart';
 
 
 class Failure extends Equatable {

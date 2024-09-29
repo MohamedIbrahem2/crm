@@ -1,5 +1,6 @@
 
 
+import 'package:crm/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
@@ -11,7 +12,7 @@ class SearchBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: AppColors.secondaryYellow),
       ),
       child: const Row(
         children: [

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sales_crm/features/leads/presentation/cubit/add_leads_state.dart';
+import 'package:crm/features/leads/presentation/cubit/add_leads_state.dart';
 
 import '../../data/repositories/add_leads_repository.dart';
 

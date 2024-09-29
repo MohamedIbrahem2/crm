@@ -25,6 +25,7 @@ class ToDoItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Card(
+        color: Colors.white,
         child: ListTile(
           leading: Checkbox(
             value: false,

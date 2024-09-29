@@ -14,7 +14,7 @@ class _LoginRemoteDataSource implements LoginRemoteDataSource {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://back.growcrm.tech/api/';
+    baseUrl ??= 'https://backcrm.growcrm.tech/api/';
   }
 
   final Dio _dio;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sales_crm/core/constants/app_colors.dart';
-import 'package:sales_crm/features/leads/presentation/cubit/add_leads_state.dart';
+import 'package:crm/core/constants/app_colors.dart';
+import 'package:crm/features/leads/presentation/cubit/add_leads_state.dart';
 import '../../cubit/add_leads_cubit.dart';
 
 class AddLeadScreen extends StatefulWidget {
@@ -57,9 +57,25 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create New Lead'),
-        backgroundColor: AppColors.primaryYellow,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 70),
+        child: AppBar(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(25),
+            ),
+          ),
+          backgroundColor: AppColors.primaryYellow,
+          title: const Text('Create new lead'),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.upload_file),
+          //     onPressed: () {
+          //       context.pushNamed(AppRoutes.leadsImportRoute);
+          //     },
+          //   ),
+          // ],
+        ),
       ),
       body: SingleChildScrollView(
         child: BlocListener<AddLeadsCubit, AddLeadState>(
@@ -165,7 +181,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Submit'),
+                  child: const Text('Submit',style: TextStyle(color: Colors.black),),
                 ),
               ],
             ),
@@ -179,9 +195,21 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
+      filled: true,
+      fillColor: Colors.white,
+      labelText: label,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: AppColors.secondaryYellow,
+        ),
       ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.secondaryYellow,width: 2.0),
+        borderRadius:
+        const BorderRadius.all(Radius.circular(10)),
+      ),
+    ),
     );
   }
 

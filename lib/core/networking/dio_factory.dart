@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:sales_crm/core/networking/api_constants.dart';
+import 'package:crm/core/networking/api_constants.dart';
 
 
 

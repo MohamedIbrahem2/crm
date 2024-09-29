@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/core/helpers/extensions.dart';
-import 'package:sales_crm/core/routing/app_routes.dart';
-import 'package:sales_crm/features/leads/presentation/pages/laeds_details_page.dart';
+import 'package:crm/core/helpers/extensions.dart';
+import 'package:crm/core/routing/app_routes.dart';
+import 'package:crm/features/leads/presentation/pages/laeds_details_page.dart';
 
 class LeadItem extends StatelessWidget {
   final String name;
@@ -14,6 +14,7 @@ class LeadItem extends StatelessWidget {
   final String status;
   final String date;
   final Color color;
+  final String moduleId;
 
   const LeadItem({
     super.key,
@@ -25,6 +26,7 @@ class LeadItem extends StatelessWidget {
     required this.status,
     required this.date,
     required this.color,
+    required this.moduleId,
   });
 
   @override

@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../data/models/note_model.dart';
+import '../../cubit/add_note_cubit.dart';
+import '../../cubit/note_cubit.dart';
 
 class NoteTab extends StatefulWidget {
-  const NoteTab({super.key});
+  final String leadId;
+  const NoteTab({super.key, required this.leadId});
+
   @override
   _NoteTabState createState() => _NoteTabState();
 }
 
-class _NoteTabState extends State<NoteTab> {
-  int _selectedOption = 1;
-  final TextEditingController _noteController = TextEditingController();
 
+class _NoteTabState extends State<NoteTab> {
+  final TextEditingController _noteController = TextEditingController();
+  @override
+  void initState(){
+    super.initState();
+    context.read<NoteCubit>().fetchNotes(widget.leadId);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +30,7 @@ class _NoteTabState extends State<NoteTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Note input field
               TextField(
                 controller: _noteController,
                 maxLines: 3,
@@ -30,49 +40,76 @@ class _NoteTabState extends State<NoteTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: RadioListTile<int>(
-              //         title: const Text('I got in touch with this lead'),
-              //         value: 0,
-              //         groupValue: _selectedOption,
-              //         onChanged: (value) => setState(() => _selectedOption = value!),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: RadioListTile<int>(
-              //         title: const Text('I have not contacted this lead'),
-              //         value: 1,
-              //         groupValue: _selectedOption,
-              //         onChanged: (value) => setState(() => _selectedOption = value!),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement note adding functionality
+
+              // Button to add the note
+              BlocConsumer<AddNoteCubit, AddNoteState>(
+                listener: (context, state) {
+                  if (state is AddNoteSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Note added successfully!')),
+                    );
+                    // Clear the input field after success
+                    _noteController.clear();
+                    context.read<NoteCubit>().fetchNotes(widget.leadId);
+                  } else if (state is AddNoteError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message)),
+                    );
+                  }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryYellow,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Text('Add Note'),
+                builder: (context, state) {
+                  if (state is AddNoteLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return ElevatedButton(
+                    onPressed: () {
+                      if (_noteController.text.isNotEmpty) {
+                        final newNote = Note(
+                          description: _noteController.text,
+                          createdAt: DateTime.now().toString(),
+                        );
+
+                        context.read<AddNoteCubit>().addNote(newNote,widget.leadId);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please enter a note!')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryYellow,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: const Text('Add Note'),
+                  );
+                },
               ),
+
               const SizedBox(height: 24),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  return const NoteItem();
+
+              // List of notes
+              BlocBuilder<NoteCubit, NoteState>(
+                builder: (context, state) {
+                  if (state is NoteLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is NoteLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  else if (state is NoteLoaded) {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.notes.length,
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemBuilder: (context, index) {
+                        return NoteItem(note: state.notes[index]);
+                      },
+                    );
+                  } else if (state is NoteError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const SizedBox();
                 },
               ),
             ],
@@ -84,36 +121,38 @@ class _NoteTabState extends State<NoteTab> {
 }
 
 class NoteItem extends StatelessWidget {
-  const NoteItem({super.key});
+  final Note note;
+
+  const NoteItem({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.orange,
             child: Icon(Icons.person, color: Colors.white),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Go Grow',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  "Go Grow",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Noted added: 2024-08-22 21:00:00',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  'Note added: ${note.createdAt}',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.',
-                  style: TextStyle(fontSize: 14),
+                  note.description ?? 'No content',
+                  style: const TextStyle(fontSize: 14),
                 ),
               ],
             ),

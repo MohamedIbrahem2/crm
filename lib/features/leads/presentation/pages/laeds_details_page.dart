@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/core/constants/app_colors.dart';
-import 'package:sales_crm/features/leads/presentation/widgets/leads_details_widget/contract_tab.dart';
+import 'package:crm/core/constants/app_colors.dart';
+import 'package:crm/features/leads/presentation/widgets/leads_details_widget/contract_tab.dart';
 
 import '../../data/models/leads_model.dart';
 import '../cubit/proposal_cubit.dart';
@@ -93,13 +93,13 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen>
               children: [
                 ProfileTab(lead: widget.lead,),
                 BlocProvider(
-                  create: (context) => FileUploadCubit(),
-                  child: ProposalsTab(),
+                  create: (context) => FileUploadCubit(widget.lead.leadId),
+                  child:  ProposalsTab(leadId: widget.lead.leadId,),
                 ),
-                ContractTab(),
-                RemindersTab(),
-                NoteTab(),
-                ActivityLogTab(),
+                 ContractTab(leadId: widget.lead.leadId,),
+                 RemindersTab(lead: widget.lead,),
+                 NoteTab(leadId: widget.lead.leadId,),
+                 ActivityLogTab(leadId: widget.lead.leadId,),
               ],
             ),
           ),

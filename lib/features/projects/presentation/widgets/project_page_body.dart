@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sales_crm/features/projects/presentation/widgets/project_item.dart';
-import 'package:sales_crm/features/projects/presentation/widgets/project_summary_header.dart';
+import 'package:crm/features/projects/presentation/widgets/project_item.dart';
+import 'package:crm/features/projects/presentation/widgets/project_summary_header.dart';
 
 class ProjectPageBody extends StatelessWidget {
   final ScrollController scrollController;
