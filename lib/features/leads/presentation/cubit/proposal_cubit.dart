@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crm/core/networking/api_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,7 @@ class FileUploadCubit extends Cubit<FileUploadState> {
   void selectFile(File selectedFile) {
     if (selectedFile.lengthSync() <= 10 * 1024 * 1024) {
       emit(state.copyWith(file: selectedFile, errorMessage: null));
+      uploadFileProposal();
     } else {
       emit(state.copyWith(errorMessage: "File size should not exceed 10 MB."));
     }
@@ -45,40 +47,39 @@ class FileUploadCubit extends Cubit<FileUploadState> {
 
   Future<void> uploadFileProposal() async {
     if (state.file != null) {
-
       emit(state.copyWith(isUploading: true, errorMessage: null));
       try {
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString("token");
         final moduleId = prefs.getString('moduleId');
+        print('Module ID: $moduleId, Leads ID: $leadsId, Token: $token');
 
         var request = http.MultipartRequest(
           'POST',
           Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/leads/$leadsId/proposals'),
         );
-
         request.headers.addAll({
           'Authorization': 'Bearer $token',
-          "Content-Type": "multipart/form-data",// Replace with your token
+          "Content-Type": "multipart/form-data",
         });
 
         // Add the file to the request
         request.files.add(await http.MultipartFile.fromPath(
-          'file', // Key for the file parameter in your API
+          'document', // Key for the file parameter in your API
           state.file!.path,
         ));
         request.fields['description'] = 'File upload'; // Ensure this field is correct
 
         var response = await request.send();
 
-        if (response.statusCode == 200) {
-          print("----------------");
-          final responseBody = await response.stream.bytesToString();
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print("Upload successful");
           emit(state.copyWith(isUploading: false));
-          print("Upload successful: $responseBody");
+
+          // Fetch the proposals again to refresh the list
+          await fetchProposals(); // This will refresh the list
         } else {
           final responseBody = await response.stream.bytesToString();
-          print("Upload failed: ${response.statusCode}, ${response.reasonPhrase}, $responseBody");
           emit(state.copyWith(errorMessage: "Upload failed: ${response.reasonPhrase}\n$responseBody"));
         }
       } catch (e) {
@@ -89,6 +90,7 @@ class FileUploadCubit extends Cubit<FileUploadState> {
       emit(state.copyWith(errorMessage: "No file selected."));
     }
   }
+
 
 
   // Function to fetch proposals from the API
@@ -102,43 +104,49 @@ class FileUploadCubit extends Cubit<FileUploadState> {
           'Authorization': 'Bearer $token',
         },
       );
-      if (response.statusCode == 200) {
-        // Decode the JSON response directly to a List<dynamic>
-        final List<dynamic> proposals = jsonDecode(response.body);
 
-        emit(state.copyWith(proposals: proposals));  // Update state with the fetched proposals
+      if (response.statusCode == 200) {
+        final List<dynamic> proposals = jsonDecode(response.body);
+        emit(state.copyWith(proposals: proposals)); // Update state with the fetched proposals
+        print("Proposals fetched and state updated");
       } else {
         emit(state.copyWith(errorMessage: 'Failed to fetch proposals.'));
+        print("Failed to fetch proposals");
       }
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Error fetching proposals: $e'));
+      print("Error fetching proposals: $e");
     }
   }
+
   Future<void> deleteImageProposal(int proposalId) async {
     final prefs = await SharedPreferences.getInstance();
     final moduleId = prefs.getString('moduleId');
     final token = prefs.getString('token');
+
     try {
       final response = await http.delete(
-        Uri.parse('http://back.growcrm.tech/api/modules/$moduleId/leads/$leadsId/proposals/$proposalId'),
+        Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/leads/$leadsId/proposals/$proposalId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-      print(proposalId);
-      print('Response Status: ${response.statusCode}');
-      print('Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
         emit(state.copyWith(
-          proposals: state.proposals?.where((p) => p['id'] != proposalId).toList(),
-          errorMessage: null,
-        ));      } else {
+          proposals: [],
+        ));
+        await fetchProposals();
+      } else {
         emit(state.copyWith(errorMessage: 'Failed to delete image'));
       }
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Error deleting image: $e'));
     }
   }
+
+
+
 }
 

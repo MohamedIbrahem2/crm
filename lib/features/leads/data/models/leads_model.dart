@@ -13,6 +13,7 @@ class Lead {
   final String zipcode;
   final String country;
   final String leadId;
+  final String updatedAt;
 
 
   Lead({
@@ -30,6 +31,7 @@ class Lead {
     required this.zipcode,
     required this.country,
     required this.leadId,
+    required this.updatedAt,
 
   });
 
@@ -37,7 +39,7 @@ class Lead {
   String toString() {
     return 'Lead(name: $name, position: $position, company: $company, amount: $amount,'
         ' status: $status, date: $date ,phone: $phone, website: $website, address: $address,'
-        ' city: $city, state: $status, zipcode: $zipcode, country: $country, leadId: $leadId)';
+        ' city: $city, state: $status, zipcode: $zipcode, country: $country, leadId: $leadId, updatedAt: $updatedAt)';
   }
 
   factory Lead.fromJson(Map<String, dynamic> json) {
@@ -45,7 +47,7 @@ class Lead {
     String name = json['name'] ?? 'Unknown';
     String position = json['position'] ?? 'Not specified';
     String company = json['company'] ?? 'Not specified';
-    String status = json['state'] ?? 'Unknown';
+    String status = json['status']['status_name'] ?? 'Unknown';
     double amount = double.tryParse(json['lead_value']?.toString() ?? '0.0') ?? 0.0;
     String date = json['needs'] ?? 'Not specified';
     String phone = json['phone'] ?? 'Not specified';
@@ -56,6 +58,8 @@ class Lead {
     String zipcode = json['zip_code'] ?? 'Not specified';
     String country = json['country']['name'] ?? 'Not specified';
     String leadId = json['id'].toString() ?? 'Not specified';
+    String updatedAt = json['updated_at'] ?? 'Not specified';
+
 
 
 
@@ -73,7 +77,8 @@ class Lead {
       state: state,
       zipcode: zipcode,
       country: country,
-        leadId: leadId
+        leadId: leadId,
+        updatedAt: updatedAt,
     );
   }
 }

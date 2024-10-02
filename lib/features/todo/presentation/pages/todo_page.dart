@@ -72,7 +72,7 @@ class _ToDoPageState extends State<ToDoPage> {
           ),
         ),
         resizeToAvoidBottomInset: true,
-        body: ToDoPageBody(scrollController: _scrollController),
+        body: const ToDoPageBody(),
         floatingActionButton: ValueListenableBuilder<bool>(
           valueListenable: _isFabVisible,
           builder: (context, isVisible, child) {
@@ -81,11 +81,10 @@ class _ToDoPageState extends State<ToDoPage> {
               duration: const Duration(milliseconds: 300),
               child: FloatingActionButton(
                 onPressed: () {
-                  // Show the dialog to add a new note
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return const TodoAddDialog();
+                      return  TodoAddDialog(onSubmit: (_) {  },);
                     },
                   );
                 },

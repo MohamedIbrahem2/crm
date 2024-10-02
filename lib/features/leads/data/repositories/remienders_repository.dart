@@ -18,6 +18,12 @@ class ReminderRepository {
         .map((json) => ReminderModel.fromJson(json))
         .toList();
   }
+  Future<List<ReminderModel>> getRemindersForCalender() async {
+    final response = await apiService.getForCalender();
+    return (response.data['data'] as List)
+        .map((json) => ReminderModel.fromJson(json))
+        .toList();
+  }
 }
 
 
@@ -38,5 +44,18 @@ class ApiService {
       ),
     );
   }
+  Future<Response> getForCalender() async {
+    final prefs = await SharedPreferences.getInstance();
+    final moduleId = prefs.getString('moduleId');
+    final token = prefs.getString('token');
+    return await dio.get('https://backcrm.growcrm.tech/api/modules/$moduleId/user-reminders',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+  }
+
 }
 

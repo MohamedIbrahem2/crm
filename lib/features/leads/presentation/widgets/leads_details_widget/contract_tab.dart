@@ -150,30 +150,9 @@ class _ContractTabState extends State<ContractTab> {
             IconButton(icon:const Icon(Icons.download), color: Colors.grey[600], onPressed: () {},),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () async {
-                final confirmDelete = await showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Confirm Delete'),
-                      content: const Text('Are you sure you want to delete this image?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    );
-                  },
-                );
+              onPressed: ()  {
 
-                if (confirmDelete == true) {
                   context.read<FileUploadContractCubit>().deleteImageContract(contractId);
-                }
               },
             )
           ],

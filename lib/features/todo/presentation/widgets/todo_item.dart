@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/models/todo_model.dart';
+import '../cubit/todo_cubit.dart';
 
 class ToDoItem extends StatelessWidget {
+  final ToDo todo;
+  final Function(ToDo) onEdit;
   final String title;
   final String description;
   final String status;
@@ -18,6 +24,8 @@ class ToDoItem extends StatelessWidget {
     required this.date,
     required this.company,
     required this.color,
+    required this.todo,
+    required this.onEdit
   });
 
   @override
@@ -28,9 +36,9 @@ class ToDoItem extends StatelessWidget {
         color: Colors.white,
         child: ListTile(
           leading: Checkbox(
-            value: false,
+            value: todo.completed == 0 ? false : true,
             onChanged: (bool? value) {
-              // Handle checkbox change
+              BlocProvider.of<ToDoCubit>(context).toggleToDo(todo);
             },
           ),
           title: Text(
@@ -43,14 +51,12 @@ class ToDoItem extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () {
-                  // Handle edit
-                },
+                onPressed: () => onEdit(todo),
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  // Handle delete
+                  BlocProvider.of<ToDoCubit>(context).deleteToDo(todo.id);
                 },
               ),
             ],

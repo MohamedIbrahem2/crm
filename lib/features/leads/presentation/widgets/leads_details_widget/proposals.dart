@@ -20,8 +20,9 @@ class _ProposalsTabState extends State<ProposalsTab> {
     return Scaffold(
       body: BlocProvider<FileUploadCubit>(
         create: (context) => FileUploadCubit(widget.leadId)..fetchProposals(),
-        child: BlocBuilder<FileUploadCubit, FileUploadState>(
+        child:BlocBuilder<FileUploadCubit, FileUploadState>(
           builder: (context, state) {
+            print("reload");
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -29,25 +30,26 @@ class _ProposalsTabState extends State<ProposalsTab> {
                 children: [
                   if (state.errorMessage != null)
                     Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
-                  if(state.proposals == null)
-                    const Center(child: CircularProgressIndicator(),),
+                  if (state.proposals == null)
+                    const Center(child: CircularProgressIndicator()),
                   if (state.proposals != null)
-                    state.proposals!.isNotEmpty ? Expanded(
+                    state.proposals!.isNotEmpty
+                        ? Expanded(
                       child: ListView.builder(
                         itemCount: state.proposals!.length,
                         itemBuilder: (context, index) {
                           final proposal = state.proposals![index];
-                          return
-                            _buildFileItem(
-                              proposal['document_name'], // Accessing document_name
-                              'File',
-                              'Uploaded at: ${proposal['created_at']}', // Accessing created_at
-                              proposal['document_path'],
-                            proposal['id'],// Accessing document_path
+                          return _buildFileItem(
+                            proposal['document_name'],
+                            'File',
+                            'Uploaded at: ${proposal['created_at']}',
+                            proposal['document_path'],
+                            proposal['id'],
                           );
                         },
                       ),
-                    ): const Center(child: Text("No Added files yet"),),
+                    )
+                        : const Center(child: Text("No Added files yet")),
                   const SizedBox(height: 24),
                   const Text(
                     'Upload Proposal',
@@ -60,6 +62,7 @@ class _ProposalsTabState extends State<ProposalsTab> {
             );
           },
         ),
+
       ),
     );
   }
@@ -151,31 +154,9 @@ class _ProposalsTabState extends State<ProposalsTab> {
             IconButton(icon:const Icon(Icons.download), color: Colors.grey[600], onPressed: () {},),
         IconButton(
           icon: const Icon(Icons.delete, color: Colors.red),
-          onPressed: () async {
-            final confirmDelete = await showDialog<bool>(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Confirm Delete'),
-                  content: const Text('Are you sure you want to delete this image?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text('Delete'),
-                    ),
-                  ],
-                );
-              },
-            );
-
-            if (confirmDelete == true) {
-              context.read<FileUploadCubit>().deleteImageProposal(proposalId);
+          onPressed: () async{
+               await context.read<FileUploadCubit>().deleteImageProposal(proposalId);// Ensure to fetch again
             }
-          },
           )
           ],
         ),

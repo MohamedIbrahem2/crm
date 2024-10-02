@@ -2,8 +2,19 @@
 
 import 'package:flutter/material.dart';
 
-class ToDoSummaryHeader extends StatelessWidget {
-  const ToDoSummaryHeader({super.key});
+import '../../data/models/todo_model.dart';
+
+class ToDoSummaryHeader extends StatefulWidget {
+  final int complete;
+  final int inComplete;
+  final int all;
+  const ToDoSummaryHeader({super.key, required this.all, required this.complete, required this.inComplete});
+
+  @override
+  State<ToDoSummaryHeader> createState() => _ToDoSummaryHeaderState();
+}
+
+class _ToDoSummaryHeaderState extends State<ToDoSummaryHeader> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,9 +23,9 @@ class ToDoSummaryHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildSummaryItem('2', 'All', Colors.blue),
-            _buildSummaryItem('1', 'In Completed', Colors.orange),
-            _buildSummaryItem('5', 'Completed', Colors.green),
+            _buildSummaryItem(widget.all.toString(), 'All', Colors.blue),
+            _buildSummaryItem(widget.inComplete.toString(), 'In Completed', Colors.orange),
+            _buildSummaryItem(widget.complete.toString(), 'Completed', Colors.green),
           ],
         ),
       ],

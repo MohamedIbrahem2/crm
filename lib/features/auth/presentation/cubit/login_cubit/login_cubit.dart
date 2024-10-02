@@ -44,8 +44,13 @@ class LoginCubit extends Cubit<LoginState> {
             (responseLoginEntity) async {
           final token = responseLoginEntity.token;
           final moduleId = responseLoginEntity.moduleId;
+          final userId = responseLoginEntity.userId;
+          if (kDebugMode) {
+            print("userId : $userId");
+          }
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('moduleId', moduleId);
+          prefs.setString('userId', userId);
           if (kDebugMode) {
             print(token);
           }
@@ -66,8 +71,6 @@ class LoginCubit extends Cubit<LoginState> {
       final token = prefs.getString('token');
 
       if (token != null) {
-        print(token);
-        print("====================");
         emit(LoginSuccess(token));
       } else {
         print("no token");

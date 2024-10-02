@@ -1,11 +1,16 @@
 import 'package:crm/features/leads/data/repositories/add_reminder_repository.dart';
 import 'package:crm/features/leads/data/repositories/assigned_users_repository.dart';
 import 'package:crm/features/leads/data/repositories/note_repository.dart';
+import 'package:crm/features/leads/data/repositories/remienders_repository.dart';
 import 'package:crm/features/leads/presentation/cubit/activity_log_cubit.dart';
 import 'package:crm/features/leads/presentation/cubit/add_note_cubit.dart';
 import 'package:crm/features/leads/presentation/cubit/add_remienders_cubit.dart';
 import 'package:crm/features/leads/presentation/cubit/assigned_users_cubit.dart';
 import 'package:crm/features/leads/presentation/cubit/note_cubit.dart';
+import 'package:crm/features/leads/presentation/cubit/reminders_cubit.dart';
+import 'package:crm/features/profile/presentation/cubit/fileUploadImage.dart';
+import 'package:crm/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:crm/features/todo/presentation/cubit/todo_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +21,7 @@ import 'package:crm/core/services/services_locator.dart';
 
 import '../features/auth/presentation/cubit/login_cubit/login_cubit.dart';
 import '../features/leads/data/repositories/leads_repository.dart';
+import '../features/leads/presentation/cubit/add_drop_down_cubit.dart';
 import '../features/leads/presentation/cubit/leads_cubit.dart';
 
 class SalesCrmApp extends StatefulWidget {
@@ -37,7 +43,7 @@ class _SalesCrmAppState extends State<SalesCrmApp> {
           create: (context) => LeadsCubit(LeadsRepository()),
         ),
         BlocProvider(
-          create: (context) => AddRemindersCubit(AddReminderRepository(ApiService())),
+          create: (context) => AddRemindersCubit(AddReminderRepository(ApiServiceAdd())),
         ),
         BlocProvider<AssignedUsersCubit>(
           create: (_) => AssignedUsersCubit(),
@@ -50,6 +56,21 @@ class _SalesCrmAppState extends State<SalesCrmApp> {
         ),
         BlocProvider<ActivityLogCubit>(
           create: (_) => ActivityLogCubit(ApiServiceLog()),
+        ),
+        BlocProvider<ToDoCubit>(
+          create: (_) => ToDoCubit(),
+        ),
+        BlocProvider<RemindersCubit>(
+          create: (_) => RemindersCubit(ReminderRepository(ApiService())),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (_) => ProfileCubit(),
+        ),
+        BlocProvider<FileUploadImageCubit>(
+          create: (_) => FileUploadImageCubit(),
+        ),
+        BlocProvider<DropdownCubit>(
+          create: (_) => DropdownCubit(),
         ),
       ],
       child: ScreenUtilInit(

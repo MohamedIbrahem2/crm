@@ -1,3 +1,4 @@
+import 'package:crm/features/leads/presentation/cubit/contract_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -94,12 +95,15 @@ class _LeadDetailsScreenState extends State<LeadDetailsScreen>
                 ProfileTab(lead: widget.lead,),
                 BlocProvider(
                   create: (context) => FileUploadCubit(widget.lead.leadId),
-                  child:  ProposalsTab(leadId: widget.lead.leadId,),
+                  child: ProposalsTab(leadId: widget.lead.leadId,),
                 ),
-                 ContractTab(leadId: widget.lead.leadId,),
-                 RemindersTab(lead: widget.lead,),
-                 NoteTab(leadId: widget.lead.leadId,),
-                 ActivityLogTab(leadId: widget.lead.leadId,),
+                BlocProvider(
+                  create: (context) => FileUploadContractCubit(widget.lead.leadId),
+                  child: ContractTab(leadId: widget.lead.leadId,),
+                ),
+                RemindersTab(lead: widget.lead,),
+                NoteTab(leadId: widget.lead.leadId,),
+                ActivityLogTab(leadId: widget.lead.leadId,),
               ],
             ),
           ),

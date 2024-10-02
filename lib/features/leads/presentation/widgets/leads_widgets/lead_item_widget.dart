@@ -9,7 +9,7 @@ class LeadItem extends StatelessWidget {
   final String name;
   final String position;
   final String company;
-  final double amount;
+  final String amount;
   final String source;
   final String status;
   final String date;
@@ -65,7 +65,7 @@ class LeadItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  amount.toStringAsFixed(2),
+                  amount,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,

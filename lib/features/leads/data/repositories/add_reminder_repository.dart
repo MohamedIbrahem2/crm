@@ -5,7 +5,7 @@ import '../models/reminder_add_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class ApiService {
+class ApiServiceAdd {
 
   Future<http.Response> post(Map<String, dynamic> body,String leadId) async {
     String baseUrl = ApiConstants.apiBaseUrl;
@@ -35,7 +35,7 @@ class ApiService {
 
 
 class AddReminderRepository {
-  final ApiService apiService;
+  final ApiServiceAdd apiService;
 
   AddReminderRepository(this.apiService);
 

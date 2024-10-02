@@ -9,7 +9,7 @@ class FileUploadContractState {
   final String? successMessage;
   final String? errorMessage;
   final bool isUploading;
-  final List<dynamic>? contracts; // To hold the fetched proposals
+  final List<dynamic>? contracts;
 
   FileUploadContractState( {this.file, this.errorMessage,this.successMessage, this.isUploading = false, this.contracts});
 
@@ -38,6 +38,7 @@ class FileUploadContractCubit extends Cubit<FileUploadContractState> {
   void selectFile(File selectedFile) {
     if (selectedFile.lengthSync() <= 10 * 1024 * 1024) {
       emit(state.copyWith(file: selectedFile, errorMessage: null));
+      uploadFileContract();
     } else {
       emit(state.copyWith(errorMessage: "File size should not exceed 10 MB."));
     }
@@ -64,14 +65,14 @@ class FileUploadContractCubit extends Cubit<FileUploadContractState> {
 
         // Add the file to the request
         request.files.add(await http.MultipartFile.fromPath(
-          'file', // Key for the file parameter in your API
+          'document',
           state.file!.path,
         ));
-        request.fields['description'] = 'File upload'; // Ensure this field is correct
+        request.fields['description'] = 'File upload';
 
         var response = await request.send();
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 200 || response.statusCode == 201) {
           print("----------------");
           final responseBody = await response.stream.bytesToString();
           emit(state.copyWith(isUploading: false));
@@ -114,26 +115,27 @@ class FileUploadContractCubit extends Cubit<FileUploadContractState> {
       emit(state.copyWith(errorMessage: 'Error fetching proposals: $e'));
     }
   }
-  Future<void> deleteImageContract(int contractId) async {
+  Future<void> deleteImageContract(int proposalId) async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
     final moduleId = prefs.getString('moduleId');
+    final token = prefs.getString('token');
+
     try {
       final response = await http.delete(
-        Uri.parse('http://back.growcrm.tech/api/modules/$moduleId/leads/$leadsId/contracts/$contractId'),
+        Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/leads/$leadsId/contracts/$proposalId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-      print(contractId);
-      print('Response Status: ${response.statusCode}');
-      print('Response Body: ${response.body}');
+      print(response.body);
+
       if (response.statusCode == 200) {
         emit(state.copyWith(
-          proposals: state.contracts?.where((p) => p['id'] != contractId).toList(),
-          errorMessage: null,
-        ));      } else {
+          proposals: [],
+        ));
+        await fetchContract();
+      } else {
         emit(state.copyWith(errorMessage: 'Failed to delete image'));
       }
     } catch (e) {

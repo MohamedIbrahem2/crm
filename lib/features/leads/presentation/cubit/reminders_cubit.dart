@@ -25,4 +25,15 @@ class RemindersCubit extends Cubit<RemindersState> {
       emit(RemindersError(e.toString()));
     }
   }
+  Future<void> fetchRemindersForCalender() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      emit(RemindersLoading());
+      final reminders = await reminderRepository.getRemindersForCalender();
+      emit(RemindersLoaded(reminders));
+    } catch (e) {
+      emit(RemindersError(e.toString()));
+    }
+  }
 }

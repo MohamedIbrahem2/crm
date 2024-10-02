@@ -1,8 +1,12 @@
+import 'package:crm/core/networking/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crm/core/constants/app_colors.dart';
 import 'package:crm/features/leads/presentation/cubit/add_leads_state.dart';
+import '../../../data/models/add_drop_down_model.dart';
+import '../../cubit/add_drop_down_cubit.dart';
+import '../../cubit/add_drop_down_state.dart';
 import '../../cubit/add_leads_cubit.dart';
 
 class AddLeadScreen extends StatefulWidget {
@@ -32,8 +36,47 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   final TextEditingController _productRelatedIdController =
       TextEditingController();
 
+  int? selectedStatus;
+  int? selectedSource;
+  int? selectedAssignedTo;
+  int? selectedCountry;
+  int? selectedProductType;
+  int? selectedProduct;
+  late DropdownCubit dropdownCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownCubit = DropdownCubit();
+
+    // Fetch all dropdown data in one go
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/modules/1/lead-statuses/get",
+        "status_name",
+        DropdownType.status);
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/modules/1/lead-sources/get",
+        "source_name",
+        DropdownType.source);
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/modules/1/users-not-in-team",
+        "name",
+        DropdownType.assigned);
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/countries", "name", DropdownType.country);
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/module/product-types",
+        "name",
+        DropdownType.productType);
+    dropdownCubit.fetchDropdownData(
+        "${ApiConstants.apiBaseUrl}/module/1/product-types/1",
+        "label",
+        DropdownType.product);
+  }
+
   @override
   void dispose() {
+    dropdownCubit.close();
     _nameController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
@@ -67,123 +110,256 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
           ),
           backgroundColor: AppColors.primaryYellow,
           title: const Text('Create new lead'),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(Icons.upload_file),
-          //     onPressed: () {
-          //       context.pushNamed(AppRoutes.leadsImportRoute);
-          //     },
-          //   ),
-          // ],
         ),
       ),
       body: SingleChildScrollView(
-        child: BlocListener<AddLeadsCubit, AddLeadState>(
-          listener: (context, state) {
-            if (state is AddLeadLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) =>
-                    const Center(child: CircularProgressIndicator()),
-              );
-            } else if (state is AddLeadSuccess) {
-              Navigator.pop(context); // Close the loading indicator
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Lead added successfully!')),
-              );
-              Navigator.pop(context); // Go back to previous screen
-            } else if (state is AddLeadError) {
-              Navigator.pop(context); // Close the loading indicator
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Failed to add lead: ${state.error}')),
-              );
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _buildTextField('Name', _nameController),
-                SizedBox(height: 10.h),
-                _buildTextField('Phone', _phoneController),
-                SizedBox(height: 10.h),
-                _buildTextField('Email', _emailController),
-                SizedBox(height: 10.h),
-                _buildTextField('Company', _companyController),
-                SizedBox(height: 10.h),
-                _buildTextField('City', _cityController),
-                SizedBox(height: 10.h),
-                _buildTextField('Address', _addressController),
-                SizedBox(height: 10.h),
-                _buildTextField('Needs', _needsController),
-                SizedBox(height: 10.h),
-                _buildTextField('Lead Value', _leadValueController),
-                SizedBox(height: 10.h),
-                _buildTextField('Position', _positionController),
-                SizedBox(height: 10.h),
-                _buildTextField('State', _stateController),
-                SizedBox(height: 10.h),
-                _buildTextField('Country ID', _countryIdController),
-                SizedBox(height: 10.h),
-                _buildTextField('Website', _websiteController),
-                SizedBox(height: 10.h),
-                _buildTextField('Zip Code', _zipCodeController),
-                SizedBox(height: 10.h),
-                _buildTextField('Source ID', _sourceIdController),
-                SizedBox(height: 10.h),
-                _buildTextField('Status ID', _statusIdController),
-                SizedBox(height: 10.h),
-                _buildTextField('Assigned To', _assignedToController),
-                SizedBox(height: 10.h),
-                _buildTextField(
-                    'Product Related ID', _productRelatedIdController),
-                SizedBox(height: 10.h),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_validateFields()) {
-                      context.read<AddLeadsCubit>().addLead(
-                            name: _nameController.text,
-                            phone: _phoneController.text,
-                            email: _emailController.text,
-                            company: _companyController.text,
-                            city: _cityController.text,
-                            address: _addressController.text,
-                            needs: _needsController.text,
-                            leadValue: int.tryParse(_leadValueController.text) ?? 0,
-                            position: _positionController.text,
-                            state: _stateController.text,
-                            countryId:
-                                int.tryParse(_countryIdController.text) ?? 0,
-                            website: _websiteController.text,
-                            zipCode: _zipCodeController.text,
-                            sourceId:
-                                int.tryParse(_sourceIdController.text) ?? 0,
-                            statusId:
-                                int.tryParse(_statusIdController.text) ?? 0,
-                            assignedTo:
-                                int.tryParse(_assignedToController.text) ?? 0,
-                            productRelatedId: int.tryParse(
-                                    _productRelatedIdController.text) ??
-                                0,
-                          );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Please fill all the fields')),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryYellow,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+        child: BlocProvider.value(
+          value: dropdownCubit,
+          child: BlocListener<AddLeadsCubit, AddLeadState>(
+            listener: (context, state) {
+              if (state is AddLeadLoading) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+              } else if (state is AddLeadSuccess) {
+                Navigator.pop(context); // Close the loading indicator
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Lead added successfully!')),
+                );
+                Navigator.pop(context); // Go back to previous screen
+              } else if (state is AddLeadError) {
+                Navigator.pop(context); // Close the loading indicator
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to add lead: ${state.error}')),
+                );
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildTextField('Name', _nameController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Phone', _phoneController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Email', _emailController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Company', _companyController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('City', _cityController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Address', _addressController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Lead Value', _leadValueController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Position', _positionController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('State', _stateController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Website', _websiteController),
+                  SizedBox(height: 10.h),
+                  _buildTextField('Zip Code', _zipCodeController),
+                  SizedBox(height: 10.h),
+                  // Dropdown for Status
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateStatus) {
+                      if (stateStatus is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateStatus is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateStatus.error}'));
+                      } else if (stateStatus is StatusDropdownLoaded) {
+                        print(stateStatus.dropdownItems.first);
+                        final statusItems = stateStatus.dropdownItems;
+                        return _buildDropdownField('Status', statusItems,
+                            (value) {
+                          setState(() {
+                            selectedStatus = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+                  SizedBox(height: 10.h),
+
+// Dropdown for Source
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateSource) {
+                      if (stateSource is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateSource is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateSource.error}'));
+                      } else if (stateSource is SourceDropdownLoaded) {
+                        print(stateSource.dropdownItems.first);
+                        final sourceItems = stateSource.dropdownItems;
+                        return _buildDropdownField('Source', sourceItems,
+                            (value) {
+                          setState(() {
+                            selectedSource = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+                  SizedBox(height: 10.h),
+
+// Dropdown for Assigned To
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateAssigned) {
+                      if (stateAssigned is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateAssigned is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateAssigned.error}'));
+                      } else if (stateAssigned is AssignedDropdownLoaded) {
+                        print(stateAssigned.dropdownItems.first);
+                        final assignedItems = stateAssigned.dropdownItems;
+                        return _buildDropdownField(
+                            'Assigned To', assignedItems, (value) {
+                          setState(() {
+                            selectedAssignedTo = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+                  SizedBox(height: 10.h),
+
+// Dropdown for Country
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateCountry) {
+                      if (stateCountry is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateCountry is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateCountry.error}'));
+                      } else if (stateCountry is CountryDropdownLoaded) {
+                        print(stateCountry.dropdownItems.first);
+                        final countryItems = stateCountry.dropdownItems;
+                        return _buildDropdownField('Country', countryItems,
+                            (value) {
+                          setState(() {
+                            selectedCountry = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+                  SizedBox(height: 10.h),
+
+// Dropdown for Product Type
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateProductType) {
+                      if (stateProductType is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateProductType is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateProductType.error}'));
+                      } else if (stateProductType
+                          is ProductTypeDropdownLoaded) {
+                        print(stateProductType.dropdownItems.first);
+                        final productTypeItems =
+                            stateProductType.dropdownItems;
+                        return _buildDropdownField(
+                            'Product Type', productTypeItems, (value) {
+                          setState(() {
+                            selectedProductType = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+                  SizedBox(height: 10.h),
+
+// Dropdown for Product
+                  BlocBuilder<DropdownCubit, DropdownState>(
+                    builder: (context, stateProduct) {
+                      if (stateProduct is DropdownLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      } else if (stateProduct is DropdownError) {
+                        return Center(
+                            child: Text('Error: ${stateProduct.error}'));
+                      } else if (stateProduct is ProductDropdownLoaded) {
+                        print(stateProduct.dropdownItems.first);
+                        final productItems = stateProduct.dropdownItems;
+                        return _buildDropdownField('Product', productItems,
+                            (value) {
+                          setState(() {
+                            selectedProduct = value;
+                          });
+                        });
+                      }
+                      return const Text(
+                          "no"); // Fallback in case state doesn't match.
+                    },
+                  ),
+
+                  SizedBox(height: 10.h),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_validateFields()) {
+                        context.read<AddLeadsCubit>().addLead(
+                              name: _nameController.text,
+                              phone: _phoneController.text,
+                              email: _emailController.text,
+                              company: _companyController.text,
+                              city: _cityController.text,
+                              address: _addressController.text,
+                              needs: _needsController.text,
+                              leadValue:
+                                  int.tryParse(_leadValueController.text) ?? 0,
+                              position: _positionController.text,
+                              state: _stateController.text,
+                              countryId: selectedCountry ?? 0,
+                              website: _websiteController.text,
+                              zipCode: _zipCodeController.text,
+                              sourceId: selectedSource ?? 0,
+                              statusId: selectedStatus ?? 0,
+                              assignedTo: selectedAssignedTo ?? 0,
+                              productRelatedId: selectedProduct ?? 0,
+                            );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Please fill all the fields')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryYellow,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
-                  child: const Text('Submit',style: TextStyle(color: Colors.black),),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -195,21 +371,50 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-      filled: true,
-      fillColor: Colors.white,
-      labelText: label,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(
-          color: AppColors.secondaryYellow,
+        filled: true,
+        fillColor: Colors.white,
+        labelText: label,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppColors.secondaryYellow,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.secondaryYellow, width: 2.0),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.secondaryYellow,width: 2.0),
-        borderRadius:
-        const BorderRadius.all(Radius.circular(10)),
+    );
+  }
+
+  Widget _buildDropdownField(
+      String label, List<DropdownItem> items, Function(int?) onChanged) {
+    return DropdownButtonFormField<int>(
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        labelText: label,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppColors.secondaryYellow,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.secondaryYellow, width: 2.0),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
       ),
-    ),
+      items: items.map((DropdownItem item) {
+        return DropdownMenuItem<int>(
+          value: item.id,
+          child: Text(item.name),
+        );
+      }).toList(),
+      onChanged: onChanged,
+      isExpanded: true,
+      hint: Text('Select $label'),
     );
   }
 
@@ -221,7 +426,13 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
         _cityController.text.isEmpty ||
         _addressController.text.isEmpty ||
         _needsController.text.isEmpty ||
-        _leadValueController.text.isEmpty) {
+        _leadValueController.text.isEmpty ||
+        selectedStatus == null ||
+        selectedSource == null ||
+        selectedAssignedTo == null ||
+        selectedCountry == null ||
+        selectedProductType == null ||
+        selectedProduct == null) {
       return false;
     }
     return true;
