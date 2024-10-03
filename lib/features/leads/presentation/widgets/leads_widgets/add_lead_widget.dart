@@ -34,7 +34,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   final TextEditingController _statusIdController = TextEditingController();
   final TextEditingController _assignedToController = TextEditingController();
   final TextEditingController _productRelatedIdController =
-      TextEditingController();
+  TextEditingController();
 
   int? selectedStatus;
   int? selectedSource;
@@ -42,41 +42,8 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   int? selectedCountry;
   int? selectedProductType;
   int? selectedProduct;
-  late DropdownCubit dropdownCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    dropdownCubit = DropdownCubit();
-
-    // Fetch all dropdown data in one go
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/modules/1/lead-statuses/get",
-        "status_name",
-        DropdownType.status);
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/modules/1/lead-sources/get",
-        "source_name",
-        DropdownType.source);
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/modules/1/users-not-in-team",
-        "name",
-        DropdownType.assigned);
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/countries", "name", DropdownType.country);
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/module/product-types",
-        "name",
-        DropdownType.productType);
-    dropdownCubit.fetchDropdownData(
-        "${ApiConstants.apiBaseUrl}/module/1/product-types/1",
-        "label",
-        DropdownType.product);
-  }
-
   @override
   void dispose() {
-    dropdownCubit.close();
     _nameController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
@@ -113,58 +80,63 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: BlocProvider.value(
-          value: dropdownCubit,
-          child: BlocListener<AddLeadsCubit, AddLeadState>(
-            listener: (context, state) {
-              if (state is AddLeadLoading) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-              } else if (state is AddLeadSuccess) {
-                Navigator.pop(context); // Close the loading indicator
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Lead added successfully!')),
-                );
-                Navigator.pop(context); // Go back to previous screen
-              } else if (state is AddLeadError) {
-                Navigator.pop(context); // Close the loading indicator
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to add lead: ${state.error}')),
-                );
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  _buildTextField('Name', _nameController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Phone', _phoneController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Email', _emailController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Company', _companyController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('City', _cityController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Address', _addressController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Lead Value', _leadValueController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Position', _positionController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('State', _stateController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Website', _websiteController),
-                  SizedBox(height: 10.h),
-                  _buildTextField('Zip Code', _zipCodeController),
-                  SizedBox(height: 10.h),
-                  // Dropdown for Status
-                  BlocBuilder<DropdownCubit, DropdownState>(
+        child: BlocListener<AddLeadsCubit, AddLeadState>(
+          listener: (context, state) {
+            if (state is AddLeadLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) =>
+                const Center(child: CircularProgressIndicator()),
+              );
+            } else if (state is AddLeadSuccess) {
+              Navigator.pop(context); // Close the loading indicator
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Lead added successfully!')),
+              );
+              Navigator.pop(context); // Go back to previous screen
+            } else if (state is AddLeadError) {
+              Navigator.pop(context); // Close the loading indicator
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to add lead: ${state.error}')),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildTextField('Name', _nameController),
+                SizedBox(height: 10.h),
+                _buildTextField('Phone', _phoneController),
+                SizedBox(height: 10.h),
+                _buildTextField('Email', _emailController),
+                SizedBox(height: 10.h),
+                _buildTextField('Company', _companyController),
+                SizedBox(height: 10.h),
+                _buildTextField('City', _cityController),
+                SizedBox(height: 10.h),
+                _buildTextField('Address', _addressController),
+                SizedBox(height: 10.h),
+                _buildTextField('Lead Value', _leadValueController),
+                SizedBox(height: 10.h),
+                _buildTextField('Position', _positionController),
+                SizedBox(height: 10.h),
+                _buildTextField('State', _stateController),
+                SizedBox(height: 10.h),
+                _buildTextField('Website', _websiteController),
+                SizedBox(height: 10.h),
+                _buildTextField('Zip Code', _zipCodeController),
+                SizedBox(height: 10.h),
+                // Dropdown for Status
+                BlocProvider(
+                  create: (context) => DropdownCubit(),
+                  child: BlocBuilder<DropdownCubit, DropdownState>(
+                    bloc: context.read<DropdownCubit>()
+                      ..fetchDropdownData(
+                          "${ApiConstants
+                              .apiBaseUrl}/modules/1/lead-statuses/get",
+                          "status_name"),
                     builder: (context, stateStatus) {
                       if (stateStatus is DropdownLoading) {
                         return const Center(
@@ -172,194 +144,217 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                       } else if (stateStatus is DropdownError) {
                         return Center(
                             child: Text('Error: ${stateStatus.error}'));
-                      } else if (stateStatus is StatusDropdownLoaded) {
+                      } else if (stateStatus is DropdownLoaded) {
                         print(stateStatus.dropdownItems.first);
                         final statusItems = stateStatus.dropdownItems;
                         return _buildDropdownField('Status', statusItems,
-                            (value) {
-                          setState(() {
-                            selectedStatus = value;
-                          });
-                        });
+                                (value) {
+                                selectedStatus = value;
+                            });
                       }
                       return const Text(
                           "no"); // Fallback in case state doesn't match.
                     },
                   ),
-                  SizedBox(height: 10.h),
+                ),
+                SizedBox(height: 10.h),
 
-// Dropdown for Source
-                  BlocBuilder<DropdownCubit, DropdownState>(
+                // Dropdown for Source
+                BlocProvider(
+                  create: (context) => DropdownCubit2(),
+                  child: BlocBuilder<DropdownCubit2, DropdownState2>(
+                    bloc: context.read<DropdownCubit2>()
+                      ..fetchDropdownData2(
+                          "${ApiConstants
+                              .apiBaseUrl}/modules/1/lead-sources/get",
+                          "source_name"),
                     builder: (context, stateSource) {
-                      if (stateSource is DropdownLoading) {
+                      if (stateSource is DropdownLoading2) {
                         return const Center(
                             child: CircularProgressIndicator());
-                      } else if (stateSource is DropdownError) {
+                      } else if (stateSource is DropdownError2) {
                         return Center(
                             child: Text('Error: ${stateSource.error}'));
-                      } else if (stateSource is SourceDropdownLoaded) {
+                      } else if (stateSource is DropdownLoaded2) {
                         print(stateSource.dropdownItems.first);
                         final sourceItems = stateSource.dropdownItems;
                         return _buildDropdownField('Source', sourceItems,
-                            (value) {
-                          setState(() {
-                            selectedSource = value;
-                          });
-                        });
+                                (value) {
+                                selectedSource = value;
+                            });
                       }
                       return const Text(
                           "no"); // Fallback in case state doesn't match.
                     },
                   ),
-                  SizedBox(height: 10.h),
+                ),
+                SizedBox(height: 10.h),
 
-// Dropdown for Assigned To
-                  BlocBuilder<DropdownCubit, DropdownState>(
+                // Dropdown for Assigned To
+                BlocProvider(
+                  create: (context) => DropdownCubit3(),
+                  child: BlocBuilder<DropdownCubit3, DropdownState3>(
+                    bloc: context.read<DropdownCubit3>()
+                      ..fetchDropdownData3(
+                          "${ApiConstants
+                              .apiBaseUrl}/modules/1/users-not-in-team",
+                          "name"),
                     builder: (context, stateAssigned) {
-                      if (stateAssigned is DropdownLoading) {
+                      if (stateAssigned is DropdownLoading3) {
                         return const Center(
                             child: CircularProgressIndicator());
-                      } else if (stateAssigned is DropdownError) {
+                      } else if (stateAssigned is DropdownError3) {
                         return Center(
                             child: Text('Error: ${stateAssigned.error}'));
-                      } else if (stateAssigned is AssignedDropdownLoaded) {
+                      } else if (stateAssigned is DropdownLoaded3) {
                         print(stateAssigned.dropdownItems.first);
                         final assignedItems = stateAssigned.dropdownItems;
                         return _buildDropdownField(
                             'Assigned To', assignedItems, (value) {
-                          setState(() {
                             selectedAssignedTo = value;
-                          });
                         });
                       }
                       return const Text(
                           "no"); // Fallback in case state doesn't match.
                     },
                   ),
-                  SizedBox(height: 10.h),
+                ),
+                SizedBox(height: 10.h),
 
-// Dropdown for Country
-                  BlocBuilder<DropdownCubit, DropdownState>(
+                // Dropdown for Country
+                BlocProvider(
+                  create: (context) => DropdownCubit4(),
+                  child: BlocBuilder<DropdownCubit4, DropdownState4>(
+                    bloc: context.read<DropdownCubit4>()
+                      ..fetchDropdownData4(
+                          "${ApiConstants.apiBaseUrl}/countries", "name"),
                     builder: (context, stateCountry) {
-                      if (stateCountry is DropdownLoading) {
+                      if (stateCountry is DropdownLoading4) {
                         return const Center(
                             child: CircularProgressIndicator());
-                      } else if (stateCountry is DropdownError) {
+                      } else if (stateCountry is DropdownError4) {
                         return Center(
                             child: Text('Error: ${stateCountry.error}'));
-                      } else if (stateCountry is CountryDropdownLoaded) {
+                      } else if (stateCountry is DropdownLoaded4) {
                         print(stateCountry.dropdownItems.first);
                         final countryItems = stateCountry.dropdownItems;
                         return _buildDropdownField('Country', countryItems,
-                            (value) {
-                          setState(() {
-                            selectedCountry = value;
-                          });
-                        });
+                                (value) {
+                                selectedCountry = value;
+                            });
                       }
                       return const Text(
                           "no"); // Fallback in case state doesn't match.
                     },
                   ),
-                  SizedBox(height: 10.h),
+                ),
+                SizedBox(height: 10.h),
 
-// Dropdown for Product Type
-                  BlocBuilder<DropdownCubit, DropdownState>(
+                // Dropdown for Product Type
+                BlocProvider(
+                  create: (context) => DropdownCubit5(),
+                  child: BlocBuilder<DropdownCubit5, DropdownState5>(
+                    bloc: context.read<DropdownCubit5>()
+                      ..fetchDropdownData5(
+                        "${ApiConstants.apiBaseUrl}/module/product-types", // URL for product types
+                        "name",),
                     builder: (context, stateProductType) {
-                      if (stateProductType is DropdownLoading) {
-                        return const Center(
-                            child: CircularProgressIndicator());
-                      } else if (stateProductType is DropdownError) {
-                        return Center(
-                            child: Text('Error: ${stateProductType.error}'));
-                      } else if (stateProductType
-                          is ProductTypeDropdownLoaded) {
-                        print(stateProductType.dropdownItems.first);
-                        final productTypeItems =
-                            stateProductType.dropdownItems;
+                      if (stateProductType is DropdownLoading5) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (stateProductType is DropdownError5) {
+                        return Center(child: Text('Error: ${stateProductType.error}'));
+                      } else if (stateProductType is DropdownLoaded5) {
+                        final productTypeItems = stateProductType.dropdownItems;
+
                         return _buildDropdownField(
-                            'Product Type', productTypeItems, (value) {
-                          setState(() {
-                            selectedProductType = value;
-                          });
-                        });
-                      }
-                      return const Text(
-                          "no"); // Fallback in case state doesn't match.
-                    },
-                  ),
-                  SizedBox(height: 10.h),
-
-// Dropdown for Product
-                  BlocBuilder<DropdownCubit, DropdownState>(
-                    builder: (context, stateProduct) {
-                      if (stateProduct is DropdownLoading) {
-                        return const Center(
-                            child: CircularProgressIndicator());
-                      } else if (stateProduct is DropdownError) {
-                        return Center(
-                            child: Text('Error: ${stateProduct.error}'));
-                      } else if (stateProduct is ProductDropdownLoaded) {
-                        print(stateProduct.dropdownItems.first);
-                        final productItems = stateProduct.dropdownItems;
-                        return _buildDropdownField('Product', productItems,
-                            (value) {
-                          setState(() {
-                            selectedProduct = value;
-                          });
-                        });
-                      }
-                      return const Text(
-                          "no"); // Fallback in case state doesn't match.
-                    },
-                  ),
-
-                  SizedBox(height: 10.h),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_validateFields()) {
-                        context.read<AddLeadsCubit>().addLead(
-                              name: _nameController.text,
-                              phone: _phoneController.text,
-                              email: _emailController.text,
-                              company: _companyController.text,
-                              city: _cityController.text,
-                              address: _addressController.text,
-                              needs: _needsController.text,
-                              leadValue:
-                                  int.tryParse(_leadValueController.text) ?? 0,
-                              position: _positionController.text,
-                              state: _stateController.text,
-                              countryId: selectedCountry ?? 0,
-                              website: _websiteController.text,
-                              zipCode: _zipCodeController.text,
-                              sourceId: selectedSource ?? 0,
-                              statusId: selectedStatus ?? 0,
-                              assignedTo: selectedAssignedTo ?? 0,
-                              productRelatedId: selectedProduct ?? 0,
-                            );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Please fill all the fields')),
+                            'Product Type',
+                            productTypeItems,
+                                (value) {
+                              selectedProductType = value;
+                              context.read<DropdownCubit6>().fetchDropdownData6(
+                                "${ApiConstants.apiBaseUrl}/module/1/product-types/$selectedProductType", // Fetch related products using product type ID
+                                "label",
+                              );
+                            }
                         );
                       }
+                      return const Text("no");
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryYellow,
-                      minimumSize: const Size(double.infinity, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                  ),
+                ),
+
+                SizedBox(height: 10.h),
+
+                // Dropdown for Product
+                BlocProvider(
+                  create: (context) => DropdownCubit6(),
+                  child: BlocBuilder<DropdownCubit6, DropdownState6>(
+                    bloc: context.read<DropdownCubit6>()..fetchDropdownData6(
+                      "${ApiConstants.apiBaseUrl}/module/1/product-types/$selectedProductType", // Fetch related products using product type ID
+                      "label",
                     ),
-                    child: const Text(
-                      'Submit',
-                      style: TextStyle(color: Colors.black),
+                    builder: (context, stateProduct) {
+                      if (stateProduct is DropdownLoading6) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (stateProduct is DropdownError6) {
+                        return Center(child: Text('Error: ${stateProduct.error}'));
+                      } else if (stateProduct is DropdownLoaded6) {
+                        final productItems = stateProduct.dropdownItems;
+
+                        return _buildDropdownField('Product', productItems, (value) {
+                          selectedProduct = value;  // Capture selected product ID
+                        });
+                      }
+                      return const Text("no");
+                    },
+                  ),
+                ),
+
+
+                SizedBox(height: 10.h),
+
+                ElevatedButton(
+                  onPressed: () {
+                    if (_validateFields()) {
+                      context.read<AddLeadsCubit>().addLead(
+                        name: _nameController.text,
+                        phone: _phoneController.text,
+                        email: _emailController.text,
+                        company: _companyController.text,
+                        city: _cityController.text,
+                        address: _addressController.text,
+                        leadValue: int.tryParse(_leadValueController.text) ?? 0,
+                        position: _positionController.text,
+                        state: _stateController.text,
+                        countryId: selectedCountry ?? 0,
+                        website: _websiteController.text,
+                        zipCode: _zipCodeController.text,
+                        sourceId: selectedSource ?? 0,
+                        statusId: selectedStatus ?? 0,
+                        assignedTo: selectedAssignedTo ?? 0,
+                        productRelatedId: selectedProduct ?? 0,
+                        productType: selectedProductType ?? 0,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Please fill all the fields')),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryYellow,
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                ],
-              ),
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -388,33 +383,41 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
     );
   }
 
-  Widget _buildDropdownField(
-      String label, List<DropdownItem> items, Function(int?) onChanged) {
-    return DropdownButtonFormField<int>(
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        labelText: label,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: AppColors.secondaryYellow,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.secondaryYellow, width: 2.0),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
+  Widget _buildDropdownField(String label, List<DropdownItem> items,
+      Function(int?) onChanged) {
+    return BlocProvider(
+      create: (context) => DropdownSelectionCubit(),
+      child: BlocBuilder<DropdownSelectionCubit, int?>(
+        builder: (context, state) {
+          return DropdownButtonFormField<int>(
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: label,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: AppColors.secondaryYellow,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: AppColors.secondaryYellow, width: 2.0),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+            items: items.map((DropdownItem item) {
+              return DropdownMenuItem<int>(
+                value: item.id,
+                child: Text(item.name),
+              );
+            }).toList(),
+            onChanged: onChanged,
+            isExpanded: true,
+            hint: Text('Select $label'),
+          );
+        },
       ),
-      items: items.map((DropdownItem item) {
-        return DropdownMenuItem<int>(
-          value: item.id,
-          child: Text(item.name),
-        );
-      }).toList(),
-      onChanged: onChanged,
-      isExpanded: true,
-      hint: Text('Select $label'),
     );
   }
 
@@ -425,7 +428,6 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
         _companyController.text.isEmpty ||
         _cityController.text.isEmpty ||
         _addressController.text.isEmpty ||
-        _needsController.text.isEmpty ||
         _leadValueController.text.isEmpty ||
         selectedStatus == null ||
         selectedSource == null ||

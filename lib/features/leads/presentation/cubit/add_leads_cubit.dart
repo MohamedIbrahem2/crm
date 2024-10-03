@@ -15,13 +15,13 @@ class AddLeadsCubit extends Cubit<AddLeadState> {
     required String company,
     required String city,
     required String address,
-    required String needs,
     required int leadValue,
     required String position,
     required String state,
     required int countryId,
     required String website,
     required String zipCode,
+    required int productType,
     required int sourceId,
     required int statusId,
     required int assignedTo,
@@ -37,7 +37,6 @@ class AddLeadsCubit extends Cubit<AddLeadState> {
         company: company,
         city: city,
         address: address,
-        needs: needs,
         leadValue: leadValue,
         position: position,
         state: state,
@@ -48,8 +47,8 @@ class AddLeadsCubit extends Cubit<AddLeadState> {
         statusId: statusId,
         assignedTo: assignedTo,
         productRelatedId: productRelatedId,
+        productType: productType,
       );
-
       if (response.isSuccess) {
         print("Lead added successfully");
         emit(AddLeadSuccess(response));

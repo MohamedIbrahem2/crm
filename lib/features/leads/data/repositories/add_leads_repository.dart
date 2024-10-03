@@ -11,13 +11,13 @@ class AddLeadsRepository {
     required String company,
     required String city,
     required String address,
-    required String needs,
     required int leadValue,
     required String position,
     required String state,
     required int countryId,
     required String website,
     required String zipCode,
+    required int productType,
     required int sourceId,
     required int statusId,
     required int assignedTo,
@@ -25,7 +25,13 @@ class AddLeadsRepository {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final moduleId = prefs.getString('moduleId');
-    final url = Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/product-type/2/leads');
+    final url = Uri.parse('https://backcrm.growcrm.tech/api/modules/$moduleId/product-type/$productType/leads',
+    );
+    // print(name);
+    // print(phone);
+    // print(email);
+    // print(sourceId);
+    // print(statusId);
     final body = jsonEncode({
       'name': name,
       'phone': phone,
@@ -33,19 +39,19 @@ class AddLeadsRepository {
       'company': company,
       'city': city,
       'address': address,
-      'needs': needs,
       'lead_value': leadValue,
       'position': position,
       'state': state,
       'country_id': countryId,
       'website': website,
       'zip_code': zipCode,
+      'product_type': productType,
       'source_id': sourceId,
       'status_id': statusId,
       'assigned_to': assignedTo,
       'product_related_id': productRelatedId,
     });
-
+    print(body);
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
@@ -53,7 +59,8 @@ class AddLeadsRepository {
         url,
         headers: {
           'Authorization': 'Bearer $token', // Use a valid token
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type' : 'application/json'
         },
         body: body,
       );

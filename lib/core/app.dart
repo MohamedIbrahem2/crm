@@ -69,8 +69,23 @@ class _SalesCrmAppState extends State<SalesCrmApp> {
         BlocProvider<FileUploadImageCubit>(
           create: (_) => FileUploadImageCubit(),
         ),
+        BlocProvider<DropdownCubit2>(
+          create: (_) => DropdownCubit2(),
+        ),
         BlocProvider<DropdownCubit>(
           create: (_) => DropdownCubit(),
+        ),
+        BlocProvider<DropdownCubit3>(
+          create: (_) => DropdownCubit3(),
+        ),
+        BlocProvider<DropdownCubit4>(
+          create: (_) => DropdownCubit4(),
+        ),
+        BlocProvider<DropdownCubit5>(
+          create: (_) => DropdownCubit5(),
+        ),
+        BlocProvider<DropdownCubit6>(
+          create: (_) => DropdownCubit6(),
         ),
       ],
       child: ScreenUtilInit(

@@ -45,11 +45,11 @@ class FileUploadImageCubit extends Cubit<FileUploadImageState> {
 
   Future<void> uploadFileProposalImage() async {
     if (state.file != null) {
-
       emit(state.copyWith(isUploading: true, errorMessage: null));
       try {
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString("token");
+
         var request = http.MultipartRequest(
           'POST',
           Uri.parse('https://backcrm.growcrm.tech/api/profile/update'),
@@ -65,20 +65,23 @@ class FileUploadImageCubit extends Cubit<FileUploadImageState> {
           'photo', // Key for the file parameter in your API
           state.file!.path,
         ));
+
         request.fields['description'] = 'File upload'; // Ensure this field is correct
 
         var response = await request.send();
 
+        // Read the response stream once and store it
+        final responseBody = await response.stream.bytesToString();
+
         if (response.statusCode == 200 || response.statusCode == 201) {
           print("----------------");
-          print("Upload successful: ${await response.stream.bytesToString()}");
-          final responseBody = await response.stream.bytesToString();
-          emit(state.copyWith(isUploading: false));
           print("Upload successful: $responseBody");
+          emit(state.copyWith(isUploading: false));
         } else {
-          final responseBody = await response.stream.bytesToString();
           print("Upload failed: ${response.statusCode}, ${response.reasonPhrase}, $responseBody");
-          emit(state.copyWith(errorMessage: "Upload failed: ${response.reasonPhrase}\n$responseBody"));
+          emit(state.copyWith(
+            errorMessage: "Upload failed: ${response.reasonPhrase}\n$responseBody",
+          ));
         }
       } catch (e) {
         emit(state.copyWith(errorMessage: "Upload failed: $e", isUploading: false));
@@ -88,5 +91,6 @@ class FileUploadImageCubit extends Cubit<FileUploadImageState> {
       emit(state.copyWith(errorMessage: "No file selected."));
     }
   }
+
 }
 

@@ -1,8 +1,9 @@
 import 'package:crm/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubit/change_password_cubit.dart';
 import '../widgets/custom_text_form.dart';
-
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
@@ -13,147 +14,141 @@ class ForgetPasswordPage extends StatefulWidget {
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  bool isLoading = false;
+  final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
+  bool _isPasswordVisible = false;
   String error = '';
-  Future sendResetLink() async {
+
+  Future<void> sendResetLink(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
+      // Trigger the password change function in the cubit
+      context.read<ChangePasswordCubit>().changePassword(passwordController.text,passwordConfirmController.text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 60,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
+    return BlocProvider(
+      create: (context) => ChangePasswordCubit(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: const []),
-                    width: 900,
-                    height: 550,
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Forget Password',
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                      ),
+                      width: 900,
+                      height: 550,
+                      child: Form(
+                        key: formKey,
+                        child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
+                          listener: (context, state) {
+                            if (state is ChangePasswordSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            } else if (state is ChangePasswordFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.error)),
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                const Text(
+                                  'Change Password',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.grey),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  'Enter Your New password and click change pass to change it',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black),
+                                ),
+                                const SizedBox(height: 20),
+                                const Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Password',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                                CustomTextForm(
+                                  controller: passwordController,
+                                  validate: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Password is empty';
+                                    }
+                                    if (passwordController.text.length < 8) {
+                                      return 'Password must be 8 or more than 8 letter';
+                                    }
+                                    return null;
+                                  },
+                                  secure: true,
+                                  obsecure: true,
+                                  hint: '*******',
+                                ),
+                                const SizedBox(height: 15),
+                                CustomTextForm(
+                                  controller: passwordConfirmController,
+                                  validate: (val) {
+                                    if (val != passwordController.text) {
+                                      return 'Password does not match';
+                                    }
 
-                          Container(
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Enter your email address below to send you a reset password link',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            alignment: Alignment.topLeft,
-                            child: const Text(
-                              'Email',
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                          CustomTextForm(
-                            controller: emailController,
-                            onSave: (val) {
-                              // controller.email = val!;
-                            },
-                            validate: (val) {
-                              if (val == null) {
-                                return 'email is empty';
-                              }
-                              return null;
-                            },
-                            obsecure: false,
-                            hint: 'zezo@gmail.com',
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              alignment: Alignment.topRight,
-                              child: const Text(
-                                'Back to Login?',
-                                style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                sendResetLink();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryYellow,
-                                  fixedSize: Size.fromWidth(800)),
-                              child: const Text('Send Reset Link',style: TextStyle(color: Colors.black),))
-                        ],
+                                    return null;
+                                  },
+                                  secure: true,
+                                  obsecure: true,
+                                  hint: '*******',
+                                ),
+                                const SizedBox(height: 15),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    sendResetLink(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primaryYellow,
+                                      fixedSize: const Size.fromWidth(800)),
+                                  child: state is ChangePasswordLoading
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                    'Change pass',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                      ),
-                      child: const Text('New Customer',style: TextStyle(color: Colors.white)))
-                ],
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

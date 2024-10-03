@@ -25,6 +25,7 @@ class _CustomTextFormState extends State<CustomTextForm> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
       controller: widget.controller,
       onSaved: widget.onSave,
       validator: widget.validate,
@@ -41,9 +42,10 @@ class _CustomTextFormState extends State<CustomTextForm> {
                     widget.obsecure = !widget.obsecure;
                   });
                 },
-                child: const Icon(Icons.remove_red_eye))
+                child: const Icon(Icons.remove_red_eye,color: Colors.red,))
                 : null,
           ),
+
     );
   }
 }
