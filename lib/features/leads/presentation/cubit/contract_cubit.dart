@@ -76,6 +76,7 @@ class FileUploadContractCubit extends Cubit<FileUploadContractState> {
           print("----------------");
           final responseBody = await response.stream.bytesToString();
           emit(state.copyWith(isUploading: false));
+          await fetchContract();
           print("Upload successful: $responseBody");
         } else {
           final responseBody = await response.stream.bytesToString();

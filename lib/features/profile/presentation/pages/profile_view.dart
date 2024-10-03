@@ -33,44 +33,41 @@ class _ProfilePageState extends State<ProfilePage> {
     // Get screen size
     final screenSize = MediaQuery.of(context).size;
 
-    return BlocProvider(
-      create: (context) => ProfileCubit(),
-      child: WillPopScope(
-        onWillPop: () async {
-          if (_lastPressedAt == null ||
-              DateTime.now().difference(_lastPressedAt!) >
-                  Duration(seconds: 2)) {
-            _lastPressedAt = DateTime.now();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Press back again to exit the app'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-            return false;
-          }
-          return true;
-        },
-        child: Scaffold(
-          drawer: const DrawerPage(),
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-          ),
-          body: BlocBuilder<ProfileCubit, ProfileState>(
-            bloc: context.read<ProfileCubit>()..fetchProfileData(),
-            builder: (context, state) {
-              if (state is ProfileLoading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is ProfileError) {
-                return Center(child: Text(state.message));
-              } else if (state is ProfileLoaded) {
-                final profileData = state.data;
-                return _buildProfileUI(profileData, screenSize);
-              }
-              return Container();
-            },
-          ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (_lastPressedAt == null ||
+            DateTime.now().difference(_lastPressedAt!) >
+                Duration(seconds: 2)) {
+          _lastPressedAt = DateTime.now();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Press back again to exit the app'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        drawer: const DrawerPage(),
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+        ),
+        body: BlocBuilder<ProfileCubit, ProfileState>(
+           bloc: context.read<ProfileCubit>()..fetchProfileData(),
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is ProfileError) {
+              return Center(child: Text(state.message));
+            } else if (state is ProfileLoaded) {
+              final profileData = state.data;
+              return _buildProfileUI(profileData, screenSize);
+            }
+            return Container();
+          },
         ),
       ),
     );
@@ -112,38 +109,34 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (context, state) {
-                return Positioned(
-                  top: screenSize.height * 0.1,
-                  // Adjust for different screen heights
-                  left: screenSize.width * 0.3,
-                  // Center based on screen width
-                  child: SizedBox(
-                    width: screenSize.width * 0.4,
-                    // Adjust size relative to screen
-                    height: screenSize.width * 0.4,
-                    child: Stack(
-                      children: [
-                        // Profile image
-                        ClipOval(
-                          child: Container(
-                            color: Colors.white,
-                            child: profileData.photoUrl != null
-                                ? Image.network(
-                                    profileData.photoUrl,
-                                    width: screenSize.width * 0.4,
-                                    height: screenSize.width * 0.4,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset("assets/images/logo.png"),
-                          ),
-                        ),
-                      ],
+            Positioned(
+              top: screenSize.height * 0.1,
+              // Adjust for different screen heights
+              left: screenSize.width * 0.3,
+              // Center based on screen width
+              child: SizedBox(
+                width: screenSize.width * 0.4,
+                // Adjust size relative to screen
+                height: screenSize.width * 0.4,
+                child: Stack(
+                  children: [
+                    // Profile image
+                    ClipOval(
+                      child: Container(
+                        color: Colors.white,
+                        child: profileData.photoUrl != null
+                            ? Image.network(
+                                profileData.photoUrl,
+                                width: screenSize.width * 0.4,
+                                height: screenSize.width * 0.4,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset("assets/images/logo.png"),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  ],
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -165,8 +158,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         File selectedFile = File(result.files.single.path!);
                         context
                             .read<FileUploadImageCubit>()
-                            .selectImageFile(selectedFile);
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LeadsPage()));
+                            .selectImageFile(selectedFile,context);
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LeadsPage()));
                       }
                     }),
                     SizedBox(height: screenSize.height * 0.02),

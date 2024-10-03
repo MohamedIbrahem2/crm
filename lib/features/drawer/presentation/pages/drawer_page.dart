@@ -72,19 +72,19 @@ class DrawerPage extends StatelessWidget {
               context.pushReplacementNamed(AppRoutes.calendarRoute);
             },
           ),
-          ListTile(
-            title: const Text(
-              'tickets',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-            leading: const Icon(Icons.confirmation_number_outlined),
-            onTap: () {
-              context.pushReplacementNamed(AppRoutes.ticketsRoute);
-            },
-          ),
+          // ListTile(
+          //   title: const Text(
+          //     'tickets',
+          //     style: TextStyle(
+          //       color: Colors.black,
+          //       fontSize: 20,
+          //     ),
+          //   ),
+          //   leading: const Icon(Icons.confirmation_number_outlined),
+          //   onTap: () {
+          //     context.pushReplacementNamed(AppRoutes.ticketsRoute);
+          //   },
+          // ),
           ListTile(
             title: const Text(
               'ToDo',

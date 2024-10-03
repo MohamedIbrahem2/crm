@@ -18,51 +18,48 @@ class _ProposalsTabState extends State<ProposalsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<FileUploadCubit>(
-        create: (context) => FileUploadCubit(widget.leadId)..fetchProposals(),
-        child:BlocBuilder<FileUploadCubit, FileUploadState>(
-          builder: (context, state) {
-            print("reload");
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (state.errorMessage != null)
-                    Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
-                  if (state.proposals == null)
-                    const Center(child: CircularProgressIndicator()),
-                  if (state.proposals != null)
-                    state.proposals!.isNotEmpty
-                        ? Expanded(
-                      child: ListView.builder(
-                        itemCount: state.proposals!.length,
-                        itemBuilder: (context, index) {
-                          final proposal = state.proposals![index];
-                          return _buildFileItem(
-                            proposal['document_name'],
-                            'File',
-                            'Uploaded at: ${proposal['created_at']}',
-                            proposal['document_path'],
-                            proposal['id'],
-                          );
-                        },
-                      ),
-                    )
-                        : const Center(child: Text("No Added files yet")),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Upload Proposal',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildUploadArea(context),
-                ],
-              ),
-            );
-          },
-        ),
-
+      body: BlocBuilder<FileUploadCubit, FileUploadState>(
+        bloc: context.read<FileUploadCubit>()..fetchProposals(),
+        builder: (context, state) {
+          print("reload");
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (state.errorMessage != null)
+                  Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
+                if (state.proposals == null)
+                  const Center(child: CircularProgressIndicator()),
+                if (state.proposals != null)
+                  state.proposals!.isNotEmpty
+                      ? Expanded(
+                    child: ListView.builder(
+                      itemCount: state.proposals!.length,
+                      itemBuilder: (context, index) {
+                        final proposal = state.proposals![index];
+                        return _buildFileItem(
+                          proposal['document_name'],
+                          'File',
+                          'Uploaded at: ${proposal['created_at']}',
+                          proposal['document_path'],
+                          proposal['id'],
+                        );
+                      },
+                    ),
+                  )
+                      : const Center(child: Text("No Added files yet")),
+                const SizedBox(height: 24),
+                const Text(
+                  'Upload Proposal',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                _buildUploadArea(context),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crm/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,16 +36,16 @@ class FileUploadImageState {
 class FileUploadImageCubit extends Cubit<FileUploadImageState> {
   FileUploadImageCubit() : super(FileUploadImageState());
 
-  void selectImageFile(File selectedFile) {
+  void selectImageFile(File selectedFile,BuildContext context) {
     if (selectedFile.lengthSync() <= 10 * 1024 * 1024) {
       emit(state.copyWith(file: selectedFile, errorMessage: null));
-      uploadFileProposalImage();
+      uploadFileProposalImage(context);
     } else {
       emit(state.copyWith(errorMessage: "File size should not exceed 10 MB."));
     }
   }
 
-  Future<void> uploadFileProposalImage() async {
+  Future<void> uploadFileProposalImage(BuildContext context) async {
     if (state.file != null) {
       emit(state.copyWith(isUploading: true, errorMessage: null));
       try {
@@ -77,6 +79,7 @@ class FileUploadImageCubit extends Cubit<FileUploadImageState> {
           print("----------------");
           print("Upload successful: $responseBody");
           emit(state.copyWith(isUploading: false));
+          context.read<ProfileCubit>().fetchProfileData();
         } else {
           print("Upload failed: ${response.statusCode}, ${response.reasonPhrase}, $responseBody");
           emit(state.copyWith(

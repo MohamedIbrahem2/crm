@@ -7,7 +7,7 @@ import 'package:get_ip_address/get_ip_address.dart';
 import 'package:meta/meta.dart';
 import 'package:crm/features/auth/domain/use_cases/login_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../../../core/error/failures.dart';
 import '../../../domain/entities/response_login_entity.dart';
 
@@ -84,8 +84,25 @@ class LoginCubit extends Cubit<LoginState> {
 
   // Logout and clear the token from shared preferences
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    emit(LoggedOut());
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.post(
+        Uri.parse('https://backcrm.growcrm.tech/api/logout'), // Change this to the correct API endpoint
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept' : 'application/json',
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        emit(LoggedOut());
+      } else {
+      }
+    } catch (e) {
+      emit(LoginError('An error occurred. : $e'));
+    }
   }
-}
+  }

@@ -17,48 +17,46 @@ class _ContractTabState extends State<ContractTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<FileUploadContractCubit>(
-        create: (context) => FileUploadContractCubit(widget.leadId)..fetchContract(),
-        child: BlocBuilder<FileUploadContractCubit, FileUploadContractState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (state.errorMessage != null)
-                    Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
-                  if(state.contracts == null)
-                    const Center(child: CircularProgressIndicator(),),
-                  if (state.contracts != null)
-                    state.contracts!.isNotEmpty ? Expanded(
-                      child: ListView.builder(
-                        itemCount: state.contracts!.length,
-                        itemBuilder: (context, index) {
-                          final contract = state.contracts![index];
-                          return
-                            _buildFileItem(
-                              contract['document_name'], // Accessing document_name
-                              'File',
-                              'Uploaded at: ${contract['created_at']}', // Accessing created_at
-                              contract['document_path'],
-                              contract['id'],// Accessing document_path
-                            );
-                        },
-                      ),
-                    ): const Center(child: Text("No Added files yet"),),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Upload Contract',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildUploadArea(context),
-                ],
-              ),
-            );
-          },
-        ),
+      body: BlocBuilder<FileUploadContractCubit, FileUploadContractState>(
+        bloc: context.read<FileUploadContractCubit>()..fetchContract(),
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (state.errorMessage != null)
+                  Text(state.errorMessage!, style: const TextStyle(color: Colors.red)),
+                if(state.contracts == null)
+                  const Center(child: CircularProgressIndicator(),),
+                if (state.contracts != null)
+                  state.contracts!.isNotEmpty ? Expanded(
+                    child: ListView.builder(
+                      itemCount: state.contracts!.length,
+                      itemBuilder: (context, index) {
+                        final contract = state.contracts![index];
+                        return
+                          _buildFileItem(
+                            contract['document_name'], // Accessing document_name
+                            'File',
+                            'Uploaded at: ${contract['created_at']}', // Accessing created_at
+                            contract['document_path'],
+                            contract['id'],// Accessing document_path
+                          );
+                      },
+                    ),
+                  ): const Center(child: Text("No Added files yet"),),
+                const SizedBox(height: 24),
+                const Text(
+                  'Upload Contract',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                _buildUploadArea(context),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
