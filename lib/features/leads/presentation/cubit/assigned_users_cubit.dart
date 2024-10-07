@@ -52,13 +52,13 @@ class AssignedUsersCubit extends Cubit<AssignedUsersState> {
       );
       print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final List<dynamic> jsonData = json.decode(response.body);
-
-        final List<AssignedUser> users = jsonData
-            .map((userJson) => AssignedUser.fromJson(userJson))
-            .toList();
-
-        emit(AssignedUsersLoaded(users));
+        final data = json.decode(response.body);
+        if (data['status'] == 'success') {
+          List<AssignedUser> users = (data['data'] as List)
+              .map((item) => AssignedUser(id: item['id'], name: item['name']))
+              .toList();
+          emit(AssignedUsersLoaded(users));
+        }
       } else {
         emit(AssignedUsersError('Failed to load users'));
       }

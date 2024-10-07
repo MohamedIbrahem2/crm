@@ -197,7 +197,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                     bloc: context.read<DropdownCubit3>()
                       ..fetchDropdownData3(
                           "${ApiConstants
-                              .apiBaseUrl}/modules/1/users-not-in-team",
+                              .apiBaseUrl}/users/assgined",
                           "name"),
                     builder: (context, stateAssigned) {
                       if (stateAssigned is DropdownLoading3) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../domain/entities/chat_enitiy.dart';
+import '../../data/models/chats_model.dart';
 import '../widgets/chat_details/chat_details_page_body.dart';
 
 class ChatDetailsPage extends StatefulWidget {

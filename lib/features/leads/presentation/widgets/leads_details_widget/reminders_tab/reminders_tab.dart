@@ -17,37 +17,39 @@ class RemindersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => RemindersCubit(ReminderRepository(ApiService()))..fetchReminders(lead.leadId),
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: AppColors.primaryYellow,
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddReminder(leadId: lead.leadId,)));
-          },
-          label: Row(
-            children: [
-              const Icon(Icons.notifications_active, color: Colors.black),
-              const SizedBox(width: 5),
-              const Text('Set Lead Reminder', style: TextStyle(color: Colors.black)),
-            ],
-          ),
-        ),
-        body: BlocBuilder<RemindersCubit, RemindersState>(
-          builder: (context, state) {
-            if (state is RemindersLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is RemindersLoaded) {
-              return _buildRemindersTable(state.reminders);
-            } else if (state is RemindersError) {
-              return Center(child: Text(state.message));
-            } else {
-              return const Center(child: Text('No reminders found.'));
-            }
-          },
+    return BlocBuilder<RemindersCubit, RemindersState>(
+      bloc: context.read<RemindersCubit>()..fetchReminders(lead.leadId),
+  builder: (context, state) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primaryYellow,
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddReminder(leadId: lead.leadId,)));
+        },
+        label: Row(
+          children: [
+            const Icon(Icons.notifications_active, color: Colors.black),
+            const SizedBox(width: 5),
+            const Text('Set Lead Reminder', style: TextStyle(color: Colors.black)),
+          ],
         ),
       ),
+      body: BlocBuilder<RemindersCubit, RemindersState>(
+        builder: (context, state) {
+          if (state is RemindersLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is RemindersLoaded) {
+            return _buildRemindersTable(state.reminders);
+          } else if (state is RemindersError) {
+            return Center(child: Text(state.message));
+          } else {
+            return const Center(child: Text('No reminders found.'));
+          }
+        },
+      ),
     );
+  },
+);
   }
 
   Widget _buildRemindersTable(List<ReminderModel> reminders) {

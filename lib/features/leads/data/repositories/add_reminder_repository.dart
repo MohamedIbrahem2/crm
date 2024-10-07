@@ -17,8 +17,9 @@ class ApiServiceAdd {
     final url = Uri.parse('$baseUrl/modules/$moduleId/leads/$leadId/reminders');
     print(url);
     final headers = {
-      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       'Authorization': 'Bearer $token',
+      'Content-Type' : 'application/json'
     };
 
     final response = await http.post(
@@ -26,7 +27,7 @@ class ApiServiceAdd {
       headers: headers,
       body: jsonEncode(body),
     );
-    print(body);
+    print(response.body);
     return response;
   }
 
@@ -41,7 +42,7 @@ class AddReminderRepository {
 
   Future<void> addReminder(ReminderAddModel reminderData,String leadId) async {
     final response = await apiService.post(reminderData.toJson(), leadId);
-
+    print(response.body);
     if (response.statusCode == 301 || response.statusCode == 302) {
       print("Redirecting to another URL");
       throw Exception("Redirecting to another URL: ${response.headers['location']}");

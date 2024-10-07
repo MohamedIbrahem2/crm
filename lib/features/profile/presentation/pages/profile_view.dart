@@ -152,14 +152,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Email', profileData.email ?? 'GoGrow@gmail.com'),
                     SizedBox(height: screenSize.height * 0.03),
                     _buildButton('Change Image', () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
-                      if (result != null && result.files.isNotEmpty) {
-                        File selectedFile = File(result.files.single.path!);
-                        context
-                            .read<FileUploadImageCubit>()
-                            .selectImageFile(selectedFile,context);
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LeadsPage()));
+                      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+                      if (pickedFile != null) {
+                        File selectedImage = File(pickedFile.path);
+                        context.read<FileUploadImageCubit>().selectImageFile(selectedImage, context);
+                      } else {
+                        // Handle the case where no image is selected
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('No image selected.')),
+                        );
                       }
                     }),
                     SizedBox(height: screenSize.height * 0.02),

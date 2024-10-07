@@ -1,6 +1,8 @@
 import 'package:crm/core/constants/app_colors.dart';
+import 'package:crm/features/leads/presentation/cubit/reminders_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../data/models/assigned_users_model.dart';
 import '../../../../data/models/reminder_add_model.dart';
@@ -17,6 +19,7 @@ class AddReminder extends StatefulWidget {
 class _AddReminderState extends State<AddReminder> {
   final _descriptionController = TextEditingController();
   String _selectedDate = '';
+  String _selectedDateTime = '';
   bool _sendEmail = false;
   int? _selectedUserId; // Changed to hold the user ID
 
@@ -43,6 +46,7 @@ class _AddReminderState extends State<AddReminder> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Reminder added successfully!')),
             );
+            context.read<RemindersCubit>().fetchReminders(widget.leadId);
             Navigator.pop(context);
           } else if (state is AddRemindersError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -55,38 +59,58 @@ class _AddReminderState extends State<AddReminder> {
           child: Column(
             children: [
               // Date Picker TextField
-              TextField(
-                readOnly: true,
-                controller: TextEditingController(text: _selectedDate),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Date to be notified',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: AppColors.secondaryYellow,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.secondaryYellow, width: 2.0),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
+            TextField(
+            readOnly: true,
+            controller: TextEditingController(text: _selectedDateTime),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Date and Time to be notified',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: Colors.yellow, // Replace with your AppColors
                 ),
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _selectedDate = pickedDate.toIso8601String();
-                    });
-                  }
-                },
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.yellow, width: 2.0),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+            onTap: () async {
+              // Step 1: Pick a date
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+
+              if (pickedDate != null) {
+                // Step 2: Pick a time after the date is selected
+                TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+
+                if (pickedTime != null) {
+                  // Combine date and time
+                  DateTime fullDateTime = DateTime(
+                    pickedDate.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    pickedTime.hour,
+                    pickedTime.minute,
+                  );
+
+                  String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(fullDateTime);
+                  setState(() {
+                    _selectedDateTime = formattedDateTime;
+                  });
+                }
+              }
+            },
+          ),
               const SizedBox(height: 16),
 
               BlocBuilder<AssignedUsersCubit, AssignedUsersState>(
@@ -189,8 +213,8 @@ class _AddReminderState extends State<AddReminder> {
                     onPressed: () {
                       final reminder = ReminderAddModel(
                         description: _descriptionController.text,
-                        date: _selectedDate,
-                        remindTo: _selectedUserId!, // Update to user ID
+                        date: _selectedDateTime,
+                        remindTo: _selectedUserId!,
                         sendEmail: _sendEmail,
                       );
                       context.read<AddRemindersCubit>().addReminder(reminder,widget.leadId);

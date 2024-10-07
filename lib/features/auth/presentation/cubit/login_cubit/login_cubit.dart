@@ -69,7 +69,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-
+      print(token);
       if (token != null) {
         emit(LoginSuccess(token));
       } else {
@@ -88,7 +88,6 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString("token");
-
       final response = await http.post(
         Uri.parse('https://backcrm.growcrm.tech/api/logout'), // Change this to the correct API endpoint
         headers: {
@@ -99,6 +98,7 @@ class LoginCubit extends Cubit<LoginState> {
       print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         emit(LoggedOut());
+        prefs.remove("token");
       } else {
       }
     } catch (e) {
