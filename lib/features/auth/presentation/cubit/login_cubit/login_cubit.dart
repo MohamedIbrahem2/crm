@@ -5,11 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:meta/meta.dart';
+import 'dart:io' show Platform;
 import 'package:crm/features/auth/domain/use_cases/login_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../core/error/failures.dart';
 import '../../../domain/entities/response_login_entity.dart';
+import 'dart:io' show Platform;
+import 'dart:io' show Platform;
 
 part 'login_state.dart';
 
@@ -24,7 +27,11 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> login(String email, String password,bool isRememberMeChecked) async {
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    AndroidDeviceInfo? androidInfo;
+    if(Platform.isAndroid){
+      androidInfo = await deviceInfo.androidInfo;
+    }
+    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     var ipAddress = IpAddress(type: RequestType.text);
     dynamic data = await ipAddress.getIpAddress();
 
@@ -33,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       // Call the login use case with parameters
       Either<Failure, ResponseLoginEntity> result = await _loginUesCase(
-        LoginParameters(email: email, password: password, device: androidInfo.brand, ipAddress: data),
+        LoginParameters(email: email, password: password, device: Platform.isAndroid ? androidInfo!.brand : iosDeviceInfo.name, ipAddress: data),
       );
 
       result.fold(

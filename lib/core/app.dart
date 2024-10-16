@@ -101,7 +101,7 @@ class _SalesCrmAppState extends State<SalesCrmApp> {
               navigatorKey: navigatorKey,
               title: 'Sales CRM',
               debugShowCheckedModeBanner: false,
-              initialRoute: AppRoutes.leadsRoute,
+              initialRoute: AppRoutes.authRoute,
               theme: ThemeData.light().copyWith(
                 primaryColor: Colors.white,
                 scaffoldBackgroundColor: Colors.white,
